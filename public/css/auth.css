@@ -1,0 +1,550 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Theme Colors Extractions */
+    --student-primary: #0AFFFF;
+    --student-primary-hover: #08d9d9;
+    --doctor-primary: #7A22FD; 
+    --doctor-primary-hover: #651bd1;
+    
+    /* Backgrounds */
+    --bg-gradient-start: #050b18;
+    --bg-gradient-mid: #0a1628;
+    --bg-gradient-end: #060d1c;
+    
+    /* Content Colors */
+    --card-bg: rgba(22, 27, 40, 0.95);
+    --border-color: rgba(255, 255, 255, 0.05);
+    
+    /* Form Inputs */
+    --input-bg: #0C101A;
+    --input-border: #1E2536;
+    --input-focus-student: rgba(10, 255, 255, 0.2);
+    --input-focus-doctor: rgba(122, 34, 253, 0.2);
+    
+    /* Text Colors */
+    --text-white: #FFFFFF;
+    --text-muted: #C7C8CC;      
+    --text-dark: #0F172A;        
+    
+    --font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse 70% 55% at 5% 0%, rgba(0, 180, 180, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 20% 10%, rgba(0, 120, 200, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 60% at 80% 90%, rgba(5, 15, 40, 0.9) 0%, transparent 70%),
+        linear-gradient(160deg, var(--bg-gradient-mid) 0%, var(--bg-gradient-end) 100%);
+    background-attachment: fixed;
+    color: var(--text-white);
+    font-family: var(--font-family);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+/* Layout Utilities */
+.auth-wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%;
+}
+.auth-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 5rem;
+}
+.auth-form-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 2rem;
+}
+
+/* Brand tag style */
+.brand-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.05);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+}
+.brand-tag.student { color: var(--student-primary); }
+.brand-tag.doctor { color: var(--doctor-primary); }
+.brand-tag::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.brand-tag.student::before { background-color: var(--student-primary); }
+.brand-tag.doctor::before { background-color: var(--doctor-primary); }
+
+/* Headings */
+.auth-heading {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+.text-gradient-student {
+    background: linear-gradient(90deg, var(--student-primary), #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.text-gradient-doctor {
+    background: linear-gradient(90deg, #A855F7, var(--doctor-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.auth-subheading {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-bottom: 3rem;
+}
+
+/* Card */
+.auth-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+.auth-card.large {
+    max-width: 560px;
+}
+.auth-card-header {
+    margin-bottom: 2rem;
+}
+.auth-card-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+.auth-card-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* Registration Page Title — pill-badge style (matches brand-tag) */
+.register-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.25rem;
+}
+.register-title.doctor {
+    color: var(--doctor-primary);
+    border-color: rgba(122, 34, 253, 0.3);
+    background: rgba(122, 34, 253, 0.08);
+}
+.register-title.doctor i { color: var(--doctor-primary); }
+.register-title.student {
+    color: var(--student-primary);
+    border-color: rgba(10, 255, 255, 0.3);
+    background: rgba(10, 255, 255, 0.06);
+}
+.register-title.student i { color: var(--student-primary); }
+
+/* Form Controls */
+.form-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.form-control, .form-select {
+    background-color: var(--input-bg) !important;
+    border: 1px solid var(--input-border);
+    color: var(--text-white) !important;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.form-control:focus, .form-select:focus {
+    box-shadow: none;
+}
+.student-theme .form-control:focus, .student-theme .form-select:focus {
+    border-color: var(--student-primary);
+    box-shadow: 0 0 0 4px var(--input-focus-student);
+}
+.doctor-theme .form-control:focus, .doctor-theme .form-select:focus {
+    border-color: var(--doctor-primary);
+    box-shadow: 0 0 0 4px var(--input-focus-doctor);
+}
+.form-control::placeholder {
+    color: #4a5568 !important;
+}
+
+.input-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-icon-wrapper i.prefix-icon {
+    position: absolute;
+    left: 1rem;
+    color: #4a5568;
+    pointer-events: none;
+}
+.input-icon-wrapper .form-control {
+    padding-left: 2.75rem;
+}
+.input-icon-wrapper .btn-toggle-password {
+    position: absolute;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: #4a5568;
+    padding: 0.5rem;
+    outline: none;
+}
+.input-icon-wrapper .btn-toggle-password:hover {
+    color: var(--text-muted);
+}
+.input-icon-wrapper .btn-forgot {
+    position: absolute;
+    top: -25px;
+    right: 0;
+    font-size: 0.75rem;
+}
+
+/* Buttons */
+.btn-primary-student {
+    background-color: var(--student-primary);
+    border: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+}
+.btn-primary-student:hover {
+    background-color: var(--student-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--input-focus-student);
+}
+
+.btn-primary-doctor {
+    background-color: var(--doctor-primary);
+    border: none;
+    color: var(--text-white);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+}
+.btn-primary-doctor:hover {
+    background-color: var(--doctor-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--input-focus-doctor);
+}
+
+/* Tabs */
+.auth-tabs {
+    display: flex;
+    background: var(--input-bg);
+    border-radius: 10px;
+    padding: 0.25rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--input-border);
+}
+.auth-tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+.auth-tab.active.student-theme {
+    background: var(--input-border);
+    color: var(--student-primary);
+}
+.auth-tab.active.doctor-theme {
+    background: var(--doctor-primary);
+    color: var(--text-white);
+}
+.auth-tab:hover:not(.active) { color: var(--text-white); }
+
+/* Radio Pills */
+.radio-pill-group { display: flex; gap: 1rem; }
+.radio-pill { flex: 1; position: relative; }
+.radio-pill input[type="radio"] { position: absolute; opacity: 0; cursor: pointer; }
+.radio-pill label {
+    display: block; width: 100%; padding: 0.75rem; text-align: center;
+    background: var(--input-bg); border: 1px solid var(--input-border);
+    border-radius: 8px; color: var(--text-muted); cursor: pointer;
+    transition: all 0.2s ease; font-size: 0.9rem;
+}
+.student-theme .radio-pill input[type="radio"]:checked + label {
+    border-color: var(--student-primary); color: var(--text-white);
+}
+.doctor-theme .radio-pill input[type="radio"]:checked + label {
+    border-color: var(--doctor-primary); color: var(--text-white);
+}
+.student-theme .radio-pill input[type="radio"]:checked + label::before {
+    content: "●"; color: var(--student-primary); margin-right: 8px;
+}
+.doctor-theme .radio-pill input[type="radio"]:checked + label::before {
+    content: "●"; color: var(--doctor-primary); margin-right: 8px;
+}
+
+/* Footer / Extra Links */
+.auth-footer-text {
+    text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);
+}
+.auth-footer-text a { font-weight: 600; }
+.student-theme .auth-footer-text a { color: var(--student-primary); }
+.doctor-theme .auth-footer-text a { color: var(--doctor-primary); }
+
+/* Choose Layout */
+.choose-container {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex: 1; padding: 2rem;
+}
+.choose-cards {
+    display: flex; gap: 2rem; margin-top: 3rem; flex-wrap: wrap; justify-content: center;
+}
+.role-card {
+    background: var(--card-bg); border: 1px solid var(--border-color);
+    border-radius: 20px; padding: 3rem; width: 350px; cursor: pointer;
+    transition: all 0.3s ease; text-align: left; text-decoration: none !important; color: white !important;
+}
+.role-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
+.role-icon {
+    width: 60px; height: 60px; background: var(--input-bg); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 2rem;
+}
+.role-card.student:hover .role-icon { color: var(--student-primary); box-shadow: 0 0 15px rgba(10,255,255,0.3); }
+.role-card.doctor:hover .role-icon { color: var(--doctor-primary); box-shadow: 0 0 15px rgba(122,34,253,0.3); }
+
+/* Validation Styles */
+.invalid-feedback { display: none; color: #f87171; font-size: 0.8rem; margin-top: 0.25rem; }
+.is-invalid ~ .invalid-feedback { display: block; }
+.is-invalid { border-color: #f87171 !important; }
+
+/* Navigation */
+.auth-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 4rem;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.auth-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--student-primary);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+.auth-nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+}
+.auth-nav-links a {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.auth-nav-links a:hover {
+    color: var(--text-white);
+}
+.auth-nav-links a.active-pill {
+    color: var(--student-primary);
+    background: rgba(10, 255, 255, 0.05);
+    border: 1px solid rgba(10, 255, 255, 0.2);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+}
+.doctor-theme .auth-nav-links a.active-pill {
+    color: var(--text-white);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.auth-nav-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.icon-btn:hover { color: var(--text-white); }
+.profile-pill {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 36px;
+    height: 36px;
+    background: var(--input-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+    border: 2px solid var(--border-color);
+}
+.profile-pill img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Unified Bottom Footer */
+.bottom-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 4rem;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    background: rgba(6, 9, 19, 0.6);
+}
+.bottom-footer .footer-brand {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.bottom-footer .footer-brand span {
+    font-weight: 300;
+}
+.bottom-footer .footer-links a {
+    color: var(--text-muted);
+    margin: 0 1rem;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+}
+.bottom-footer .footer-links a:hover { color: var(--text-white); }
+.bottom-footer .footer-copy {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* =============================================
+   PANEL TRANSITION SYSTEM
+   ============================================= */
+
+/* Wrapper — height animates smoothly between panels */
+.form-panels-wrapper {
+    position: relative;
+    overflow: hidden;
+    transition: height 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base panel */
+.form-panel { width: 100%; }
+
+/* Visible — in normal flow, fully shown */
+.form-panel.panel-visible {
+    position: relative;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+/* Hidden — pulled out of flow, invisible */
+.form-panel.panel-hidden {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    visibility: hidden;
+    transition: none;
+}
+
+/* Exiting — slides up + fades out, out of flow so wrapper is free */
+.form-panel.panel-exiting {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+/* Entering prep — back in flow (so natural height is measurable),
+   stays visually invisible until double-rAF fires the visible class */
+.form-panel.panel-entering {
+    position: relative;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    visibility: visible;
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .auth-wrapper { flex-direction: column; }
+    .auth-sidebar { padding: 2rem 2rem 1rem; text-align: center; }
+    .auth-sidebar .brand-tag { margin: 0 auto 1.5rem !important; }
+    .auth-nav { padding: 1rem 1.5rem; }
+    .auth-nav-links { display: none; }
+    .bottom-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    .bottom-footer .footer-links a { margin: 0 0.5rem; }
+}
+@media (max-width: 575px) {
+    .auth-sidebar { display: none; }
+    .auth-card, .auth-card.large { max-width: 100%; }
+    .auth-form-container { padding: 1rem; }
+}
