@@ -13,11 +13,24 @@ use Illuminate\Support\Facades\DB;
 
 class DoctorAssignmentController extends Controller
 {
+    // ── Private helper ─────────────────────────────────────────────────────────
+
+    /**
+     * Find a doctor user by ID, eager-loading their role.
+     * Throws ModelNotFoundException if the user is not a doctor.
+     */
+    private function findDoctor(int|string $id): User
+    {
+        return User::with('role')
+            ->whereHas('role', fn($q) => $q->where('name', 'doctor'))
+            ->findOrFail($id);
+    }
+
+    // ── Show Assign Form ───────────────────────────────────────────────────────
+
     public function showAssignForm($id)
     {
-        $doctor = User::query()->whereHas('role', function($q) {
-            $q->where('name', 'doctor');
-        })->where('id', $id)->firstOrFail();
+        $doctor = $this->findDoctor($id);
 
         if ($doctor->status !== 'approved') {
             return redirect()->route('admin.doctors.index')
@@ -25,7 +38,7 @@ class DoctorAssignmentController extends Controller
         }
 
         $levels = Level::all();
-        $year   = AcademicYear::where('is_active', true)->first();
+        $year   = AcademicYear::active();
 
         $assignedLevelIds = DoctorAssignment::where('doctor_id', $doctor->id)
             ->where('academic_year_id', optional($year)->id)
@@ -35,18 +48,18 @@ class DoctorAssignmentController extends Controller
         return view('admin.doctors.assign', compact('doctor', 'levels', 'year', 'assignedLevelIds'));
     }
 
+    // ── Assign ─────────────────────────────────────────────────────────────────
+
     public function assign(AssignDoctorRequest $request, $id)
     {
-        $doctor = User::query()->whereHas('role', function($q) {
-            $q->where('name', 'doctor');
-        })->where('id', $id)->firstOrFail();
+        $doctor = $this->findDoctor($id);
 
         if ($doctor->status !== 'approved') {
             return redirect()->back()
                 ->with('error', __('cms.doctors.cannot_assign_unapproved'));
         }
 
-        $year = AcademicYear::where('is_active', true)->first();
+        $year = AcademicYear::active();
         if (!$year) {
             return redirect()->back()
                 ->with('error', __('cms.assignments.no_active_year'));
@@ -59,9 +72,9 @@ class DoctorAssignmentController extends Controller
 
             foreach ($request->levels as $levelId) {
                 DoctorAssignment::create([
-                    'doctor_id'          => $doctor->id,
-                    'level_id'           => $levelId,
-                    'academic_year_id'   => $year->id,
+                    'doctor_id'        => $doctor->id,
+                    'level_id'         => $levelId,
+                    'academic_year_id' => $year->id,
                 ]);
             }
         });
@@ -70,13 +83,13 @@ class DoctorAssignmentController extends Controller
             ->with('success', __('cms.assignments.success'));
     }
 
+    // ── Show Assignments ───────────────────────────────────────────────────────
+
     public function show($id)
     {
-        $doctor = User::query()->whereHas('role', function($q) {
-            $q->where('name', 'doctor');
-        })->where('id', $id)->firstOrFail();
+        $doctor = $this->findDoctor($id);
 
-        $year = AcademicYear::where('is_active', true)->first();
+        $year = AcademicYear::active();
 
         $assignments = DoctorAssignment::with('level')
             ->where('doctor_id', $doctor->id)

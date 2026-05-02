@@ -17,24 +17,26 @@ class StudentController extends Controller
 {
     public function __construct(private readonly StudentService $service) {}
 
-    // ── Helper: pull middleware-resolved objects ───────────────────────────────
-
-    private function resolved(Request $request): array
-    {
-        return [
-            $request->attributes->get('resolvedLevel'),
-            $request->attributes->get('activeYear'),
-        ];
-    }
 
     // ── Index ──────────────────────────────────────────────────────────────────
 
     public function index(Request $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
-        $filter   = $request->query('filter');
-        $students = $this->service->getStudents($level->id, $activeYear->id, $filter);
+        $filter = $request->query('filter');
+        
+        $query = Student::where('level_id', $level->id)
+                        ->where('academic_year_id', $activeYear->id);
+
+        match($filter) {
+            'activated'     => $query->where('is_active', true),
+            'not_activated' => $query->where('is_active', false),
+            'trashed'       => $query->onlyTrashed(),
+            default         => null
+        };
+
+        $students = $query->paginate(25);
 
         return view('doctor.students.index', compact('level', 'activeYear', 'students', 'filter'));
     }
@@ -43,7 +45,7 @@ class StudentController extends Controller
 
     public function showImport(Request $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         return view('doctor.students.import', compact('level', 'activeYear'));
     }
@@ -52,7 +54,7 @@ class StudentController extends Controller
 
     public function import(ImportStudentsRequest $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         try {
             DB::transaction(function () use ($request, $level, $activeYear) {
@@ -97,7 +99,7 @@ class StudentController extends Controller
 
     public function export(Request $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         $filename = 'students_level_' . $level->id . '_year_' . $activeYear->id . '.xlsx';
         $export   = new StudentsExport($level->id, $activeYear->id);
@@ -109,7 +111,7 @@ class StudentController extends Controller
 
     public function destroy(Request $request, Level $level, Student $student)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         // Verify the student belongs to this level + year
         if ($student->level_id !== $level->id || $student->academic_year_id !== $activeYear->id) {
@@ -121,5 +123,21 @@ class StudentController extends Controller
         return redirect()
             ->route('doctor.students.index', $level->id)
             ->with('success', __('cms.student.delete_success'));
+    }
+
+    // ── Restore ────────────────────────────────────────────────────────────────
+
+    public function restore(Request $request, Level $level, int $studentId)
+    {
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
+
+        $student = Student::onlyTrashed()
+                          ->where('level_id', $level->id)
+                          ->where('academic_year_id', $activeYear->id)
+                          ->findOrFail($studentId);
+
+        $student->restore();
+
+        return back()->with('success', __('cms.student.restore_success'));
     }
 }

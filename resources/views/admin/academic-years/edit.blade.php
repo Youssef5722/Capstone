@@ -25,7 +25,7 @@
                 <h3><i class="bi bi-calendar-week me-2" style="color:#fbbf24;"></i>{{ __('cms.academic_years.edit_title') }}</h3>
             </div>
             <div class="cms-card-body">
-                <form action="{{ route('admin.academic-years.update', $academicYear->id) }}" method="POST">
+                <form action="{{ route('admin.academic-years.update', $academicYear) }}" method="POST">
                     @csrf
                     @method('PUT')
 

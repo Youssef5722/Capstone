@@ -37,16 +37,15 @@ class AcademicYearController extends Controller
     }
 
     // ── Edit ───────────────────────────────────────────────────
-    public function edit($id)
+    public function edit(AcademicYear $academicYear)
     {
-        $academicYear = AcademicYear::findOrFail($id);
         return view('admin.academic-years.edit', compact('academicYear'));
     }
 
     // ── Update ─────────────────────────────────────────────────
-    public function update(UpdateAcademicYearRequest $request, $id)
+    // PREP-1: Route Model Binding — $academicYear resolved by Laravel.
+    public function update(UpdateAcademicYearRequest $request, AcademicYear $academicYear)
     {
-        $academicYear = AcademicYear::findOrFail($id);
         $academicYear->update($request->validated());
 
         return redirect()->route('admin.academic-years.index')
@@ -54,32 +53,33 @@ class AcademicYearController extends Controller
     }
 
     // ── Activate ───────────────────────────────────────────────
-    public function activate($id)
+    // PREP-1: Route Model Binding — passes resolved Model directly to Service.
+    public function activate(AcademicYear $academicYear)
     {
-        $this->service->activateYear((int) $id);
+        // Pass the model — Service no longer needs to re-fetch via findOrFail().
+        $this->service->activateYear($academicYear);
 
         return redirect()->route('admin.academic-years.index')
             ->with('success', __('cms.academic_years.activated_success'));
     }
 
     // ── Destroy ────────────────────────────────────────────────
-    public function destroy($id)
+    // PREP-1: Route Model Binding — Laravel resolves and 404s automatically.
+    public function destroy(AcademicYear $academicYear)
     {
-        $year = AcademicYear::findOrFail($id);
-
         // Guard 1 — never delete the active year.
-        if ($year->is_active) {
+        if ($academicYear->is_active) {
             return redirect()->route('admin.academic-years.index')
                 ->with('error', __('cms.academic_years.cannot_delete_active'));
         }
 
         // Guard 2 — never delete a year that still has related data.
-        if (! $this->service->canDelete($year)) {
+        if (! $this->service->canDelete($academicYear)) {
             return redirect()->route('admin.academic-years.index')
                 ->with('error', __('cms.academic_years.cannot_delete_has_data'));
         }
 
-        $year->delete();
+        $academicYear->delete();
 
         return redirect()->route('admin.academic-years.index')
             ->with('success', __('cms.academic_years.deleted_success'));

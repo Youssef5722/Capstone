@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name', 100);
             $table->string('email', 150)->unique();
+            $table->string('phone', 11)->nullable();
             $table->string('password');
             $table->string('national_id', 20)->unique();
             $table->unsignedInteger('role_id');

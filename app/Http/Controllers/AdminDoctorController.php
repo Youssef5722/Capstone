@@ -11,7 +11,8 @@ use Illuminate\View\View;
 class AdminDoctorController extends Controller
 {
     public function index() {
-        $doctors = User::whereHas('role', fn($q) => $q->where('name','doctor'))
+        $doctors = User::with('role')
+                       ->whereHas('role', fn($q) => $q->where('name','doctor'))
                        ->where('status','approved')->get();
         return view('admin.doctors.index', compact('doctors'));
     }

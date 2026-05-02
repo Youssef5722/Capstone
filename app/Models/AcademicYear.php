@@ -23,7 +23,9 @@ class AcademicYear extends Model
      */
     public static function active(): ?self
     {
-        return static::where('is_active', true)->first();
+        static $cache = null;
+
+        return $cache ??= static::where('is_active', true)->first();
     }
 
     // ── Relationships ──────────────────────────────────────────
@@ -35,5 +37,10 @@ class AcademicYear extends Model
     public function students(): HasMany
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function projectIdeas(): HasMany
+    {
+        return $this->hasMany(ProjectIdea::class);
     }
 }

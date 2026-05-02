@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\AcademicYear;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureAcademicYearActive
@@ -19,8 +20,16 @@ class EnsureAcademicYearActive
     public function handle(Request $request, Closure $next): Response
     {
         if (! AcademicYear::active()) {
+            $user = Auth::user();
+
+            if ($user?->role?->name === 'admin') {
+                return redirect()
+                    ->route('admin.academic-years.index')
+                    ->with('error', __('cms.academic_years.no_active_year_blocked'));
+            }
+
             return redirect()
-                ->route('admin.academic-years.index')
+                ->route('doctor.dashboard')
                 ->with('error', __('cms.academic_years.no_active_year_blocked'));
         }
 

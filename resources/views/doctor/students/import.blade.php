@@ -83,6 +83,7 @@
 @push('scripts')
 <script>
 document.getElementById('importForm').addEventListener('submit', function() {
+    if (!this.checkValidity()) return;
     const btn = document.getElementById('importSubmitBtn');
     btn.disabled = true;
     btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> {{ __('cms.general.loading') }}';

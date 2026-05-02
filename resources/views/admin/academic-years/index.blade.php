@@ -61,12 +61,12 @@
                         </td>
                         <td>
                             <div class="d-flex gap-2 flex-wrap">
-                                <a href="{{ route('admin.academic-years.edit', $year->id) }}" 
+                                <a href="{{ route('admin.academic-years.edit', $year) }}" 
                                    class="cms-btn cms-btn-warning cms-btn-sm">
                                     <i class="bi bi-pencil"></i> {{ __('cms.academic_years.edit') }}
                                 </a>
                                 @if(!$year->is_active)
-                                <form action="{{ route('admin.academic-years.activate', $year->id) }}" method="POST">
+                                <form action="{{ route('admin.academic-years.activate', $year) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="cms-btn cms-btn-success cms-btn-sm"
                                         onclick="return confirm('{{ __('cms.academic_years.confirm_activate') }}')">

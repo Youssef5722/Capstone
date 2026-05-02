@@ -15,21 +15,11 @@ class ProjectIdeaController extends Controller
 {
     public function __construct(private readonly ProjectIdeaService $service) {}
 
-    // ── Helper: pull middleware-resolved objects ───────────────────────────────
-
-    private function resolved(Request $request): array
-    {
-        return [
-            $request->attributes->get('resolvedLevel'),
-            $request->attributes->get('activeYear'),
-        ];
-    }
-
     // ── Index ──────────────────────────────────────────────────────────────────
 
     public function index(Request $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         $ideas = $this->service->getIdeas(Auth::id(), $level->id, $activeYear->id);
 
@@ -40,7 +30,7 @@ class ProjectIdeaController extends Controller
 
     public function create(Request $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         return view('doctor.ideas.create', compact('level', 'activeYear'));
     }
@@ -49,7 +39,7 @@ class ProjectIdeaController extends Controller
 
     public function store(StoreProjectIdeaRequest $request, Level $level)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         $this->service->store([
             'doctor_id'        => Auth::id(),
@@ -68,7 +58,7 @@ class ProjectIdeaController extends Controller
 
     public function edit(Request $request, Level $level, ProjectIdea $idea)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         // Ownership check — doctors can only edit their own ideas
         if ($idea->doctor_id !== Auth::id()) {
@@ -82,7 +72,7 @@ class ProjectIdeaController extends Controller
 
     public function update(UpdateProjectIdeaRequest $request, Level $level, ProjectIdea $idea)
     {
-        [$level, $activeYear] = $this->resolved($request);
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         if ($idea->doctor_id !== Auth::id()) {
             abort(403, __('cms.doctor.unauthorized'));
@@ -102,7 +92,7 @@ class ProjectIdeaController extends Controller
 
     public function destroy(Request $request, Level $level, ProjectIdea $idea)
     {
-        [$level] = $this->resolved($request);
+        [$level] = $this->resolveMiddlewareContext($request);
 
         if ($idea->doctor_id !== Auth::id()) {
             abort(403, __('cms.doctor.unauthorized'));

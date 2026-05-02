@@ -20,10 +20,17 @@ class StudentsImport
      * wraps the Excel::import() call in DB::transaction() so that any
      * exception thrown here triggers a full rollback.
      *
+     * PREP-2: Rows are accumulated in $batch[] and inserted in one
+     * bulk Student::insert() call instead of N individual INSERTs.
+     * This is significantly faster for large Excel files.
+     *
      * @throws \Exception on validation or uniqueness failure
      */
     public function collection(Collection $rows): void
     {
+        // PREP-2: Accumulate validated rows for a single bulk INSERT.
+        $batch = [];
+
         foreach ($rows as $index => $row) {
             $rowNum = $index + 2; // 1-indexed, account for heading row
 
@@ -56,16 +63,26 @@ class StudentsImport
                 $code = Str::random(10);
             } while (Student::where('activation_code', $code)->exists());
 
-            // ── Insert student ─────────────────────────────────────────
-            Student::create([
-                'name'            => $name,
-                'university_id'   => $universityId,
+            // ── Accumulate row for batch insert ────────────────────────
+            // PREP-2: created_at/updated_at set manually — insert() bypasses
+            // Eloquent model timestamps.
+            $batch[] = [
+                'name'             => $name,
+                'university_id'    => $universityId,
                 // email is null — student will set it at account activation
-                'activation_code' => $code,
-                'is_active'       => false,
-                'level_id'        => $this->levelId,
-                'academic_year_id'=> $this->academicYearId,
-            ]);
+                'activation_code'  => $code,
+                'is_active'        => false,
+                'level_id'         => $this->levelId,
+                'academic_year_id' => $this->academicYearId,
+                'created_at'       => now(),
+                'updated_at'       => now(),
+            ];
+        }
+
+        // ── Single bulk INSERT for all validated rows ──────────────────
+        // PREP-2: One DB round-trip instead of N — much faster at scale.
+        if (!empty($batch)) {
+            Student::insert($batch);
         }
     }
 }

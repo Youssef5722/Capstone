@@ -48,8 +48,12 @@
                class="cms-badge {{ $filter === 'not_activated' ? 'cms-badge-danger' : 'cms-badge-secondary' }}">
                <i class="bi bi-hourglass me-1"></i>{{ __('cms.student.filter_not_activated') }}
             </a>
+            <a href="{{ route('doctor.students.index', [$level->id, 'filter' => 'trashed']) }}"
+               class="cms-badge {{ $filter === 'trashed' ? 'cms-badge-warning' : 'cms-badge-secondary' }}">
+               <i class="bi bi-trash me-1"></i>{{ __('cms.student.filter_trashed') }}
+            </a>
             <span class="ms-auto" style="font-size:.8rem;color:var(--cms-text-muted);">
-                {{ $students->count() }} {{ __('cms.doctors.name') }}(s)
+                {{ $students->total() }} {{ __('cms.student.name') }}(s)
             </span>
         </div>
     </div>
@@ -69,7 +73,7 @@
                     <thead>
                         <tr>
                             <th style="width:3rem;">#</th>
-                            <th>{{ __('cms.doctors.name') }}</th>
+                            <th>{{ __('cms.student.name') }}</th>
                             <th>{{ __('cms.student.university_id') }}</th>
                             <th>{{ __('cms.auth.activation_code') }}</th>
                             <th>{{ __('cms.doctors.status') }}</th>
@@ -105,15 +109,24 @@
                                 @endif
                             </td>
                             <td>
+                                @if(request('filter') === 'trashed')
+                                <form method="POST" action="{{ route('doctor.students.restore', [$level, $student->id]) }}">
+                                    @csrf
+                                    <button type="submit" class="cms-btn cms-btn-warning cms-btn-sm">
+                                        <i class="bi bi-arrow-counterclockwise"></i> {{ __('cms.student.restore') }}
+                                    </button>
+                                </form>
+                                @else
                                 <form method="POST"
                                       action="{{ route('doctor.students.destroy', [$level->id, $student->id]) }}"
-                                      onsubmit="return confirm('{{ __('cms.student.confirm_delete') }}')">
+                                      onsubmit="return confirm({{ Js::from(__('cms.student.confirm_delete')) }})">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="cms-btn cms-btn-danger cms-btn-sm">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -123,5 +136,12 @@
         @endif
     </div>
 </div>
+
+{{-- ── Pagination ─────────────────────────────────────────────────────────── --}}
+@if($students->hasPages())
+<div class="d-flex justify-content-center mt-3">
+    {{ $students->withQueryString()->links() }}
+</div>
+@endif
 
 @endsection

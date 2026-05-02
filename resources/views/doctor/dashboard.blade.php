@@ -41,27 +41,39 @@
                 <div>{{ __('cms.doctor.no_active_year') }}</div>
             </div>
         @elseif($assignments->isEmpty())
-            <div class="cms-empty-state">
-                <i class="bi bi-layers"></i>
-                <p>{{ __('cms.doctor.not_assigned_yet') }}</p>
+            <div class="cms-empty-state" style="padding:4rem 1rem; text-align:center;">
+                <i class="bi bi-clipboard-x" style="font-size:3rem; color:var(--cms-text-muted); margin-bottom:1rem; display:block;"></i>
+                <p style="color:var(--cms-text-muted); font-size:1.1rem; margin:0;">{{ __('cms.doctor.no_levels_assigned') }}</p>
             </div>
         @else
-            <div class="d-flex flex-wrap gap-3">
+            <div class="row g-4">
                 @foreach($assignments as $assignment)
-                    <div class="cms-level-card" style="display:flex;flex-direction:column;gap:.5rem;padding:.75rem 1rem;background:var(--cms-bg-card,#1a1a2e);border:1px solid var(--cms-border,rgba(255,255,255,.08));border-radius:.75rem;min-width:200px;">
-                        <span class="cms-level-pill" style="margin:0;">
-                            <i class="bi bi-bookmark-fill me-1" style="font-size:.75rem;"></i>
-                            {{ $assignment->level->name }}
-                        </span>
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('doctor.students.index', $assignment->level->id) }}"
-                               class="cms-btn cms-btn-secondary cms-btn-sm" style="font-size:.75rem;">
-                                <i class="bi bi-people me-1"></i>{{ __('cms.doctor.view_students') }}
-                            </a>
-                            <a href="{{ route('doctor.ideas.index', $assignment->level->id) }}"
-                               class="cms-btn cms-btn-secondary cms-btn-sm" style="font-size:.75rem;">
-                                <i class="bi bi-lightbulb me-1"></i>{{ __('cms.doctor.view_ideas') }}
-                            </a>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="cms-level-card" style="display:flex;flex-direction:column;gap:1.25rem;padding:1.5rem;background:var(--cms-bg-card,#1a1a2e);border:1px solid var(--cms-border,rgba(255,255,255,.08));border-radius:1rem;height:100%;">
+                            <h4 style="margin:0;font-size:1.25rem;color:var(--cms-text);">
+                                <i class="bi bi-bookmark-fill me-2" style="color:#a78bfa;"></i>
+                                {{ $assignment->level->name }}
+                            </h4>
+                            
+                            <div class="d-flex flex-column gap-2" style="font-size:0.9rem;color:var(--cms-text-muted);">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-people me-2"></i>Students ({{ $activeYear->name ?? '—' }})</span>
+                                    <span class="fw-bold" style="color:var(--cms-text);">{{ isset($assignment->level->students) ? $assignment->level->students->where('academic_year_id', $activeYear?->id)->count() : 0 }}</span>
+                                </div>
+                                @if(isset($assignment->level->ideas))
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-lightbulb me-2"></i>Project Ideas</span>
+                                    <span class="fw-bold" style="color:var(--cms-text);">{{ $assignment->level->ideas->where('academic_year_id', $activeYear?->id)->count() }}</span>
+                                </div>
+                                @endif
+                            </div>
+
+                            <div class="mt-auto pt-2">
+                                <a href="{{ route('doctor.students.index', $assignment->level->id) }}"
+                                   class="cms-btn cms-btn-primary w-100 justify-content-center">
+                                    Manage Level <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @endforeach

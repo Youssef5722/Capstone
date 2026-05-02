@@ -43,7 +43,7 @@
                             <th style="width:3rem;">#</th>
                             <th>{{ __('cms.doctor.idea_title') }}</th>
                             <th>{{ __('cms.doctor.idea_description') }}</th>
-                            <th style="width:9rem;">{{ __('cms.academic_years.name') }}</th>
+                            <th style="width:9rem;">{{ __('cms.general.created_at') }}</th>
                             <th style="width:10rem;">{{ __('cms.general.actions') }}</th>
                         </tr>
                     </thead>
@@ -66,7 +66,7 @@
                                     </a>
                                     <form method="POST"
                                           action="{{ route('doctor.ideas.destroy', [$level->id, $idea->id]) }}"
-                                          onsubmit="return confirm('{{ __('cms.doctor.confirm_delete') }}')">
+                                     onsubmit="return confirm({{ Js::from(__('cms.doctor.confirm_delete')) }})">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="cms-btn cms-btn-danger cms-btn-sm">

@@ -126,6 +126,24 @@
             <i class="bi bi-grid-1x2-fill"></i> {{ __('cms.nav.dashboard') }}
         </a>
 
+        @isset($level)
+        <span class="cms-nav-section" style="margin-top: 1rem;">{{ __('cms.doctor.level_context', ['name' => $level->name]) }}</span>
+        <a href="{{ route('doctor.students.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.students.*') ? 'active' : '' }}">
+            <i class="bi bi-people"></i> Student Management
+        </a>
+        <a href="{{ route('doctor.ideas.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.ideas.*') ? 'active' : '' }}">
+            <i class="bi bi-lightbulb"></i> Project Ideas
+        </a>
+        <a href="#" class="cms-nav-item text-muted" style="opacity: 0.5; pointer-events: none;" tabindex="-1" aria-disabled="true">
+            <i class="bi bi-diagram-3"></i> Team Management (soon)
+        </a>
+
+        <span class="cms-nav-section" style="margin-top: 1rem;">{{ __('cms.general.actions') ?? 'Actions' }}</span>
+        <a href="{{ route('doctor.dashboard') }}" class="cms-nav-item">
+            <i class="bi bi-arrow-left"></i> {{ __('cms.doctor.back_to_dashboard') }}
+        </a>
+        @endisset
+
         @elseif($isStudent)
         <!-- Student Navigation -->
         <span class="cms-nav-section">{{ __('cms.nav.dashboard') }}</span>

@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role'         => \App\Http\Middleware\RoleMiddleware::class,
             'active.year'  => \App\Http\Middleware\EnsureAcademicYearActive::class,
             'doctor.level' => \App\Http\Middleware\EnsureDoctorLevelAccess::class,
+            'student.year.active' => \App\Http\Middleware\EnsureStudentYearActive::class,
         ]);
 
         $middleware->web(append: [

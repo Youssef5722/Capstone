@@ -251,6 +251,7 @@ return [
         'activated_success'     => 'تم التفعيل بنجاح',
         'account_inactive'      => 'الحساب غير مفعل',
         'invalid_credentials'   => 'بيانات غير صحيحة',
+        'year_not_active'       => 'حسابك غير مفعل للعام الدراسي الحالي.',
         // Sprint 2
         'import_title'          => 'استيراد الطلاب',
         'import_btn'            => 'استيراد Excel',
@@ -260,6 +261,9 @@ return [
         'filter_all'            => 'الكل',
         'filter_activated'      => 'مفعَّل',
         'filter_not_activated'  => 'غير مفعَّل',
+        'filter_trashed'        => 'محذوف',
+        'restore'               => 'استرجاع',
+        'restore_success'       => 'تم استرجاع الطالب بنجاح.',
         'delete_success'        => 'تم حذف الطالب بنجاح.',
         'no_students'           => 'لا يوجد طلاب لهذا المستوى في السنة الأكاديمية الحالية.',
         'list_title'            => 'قائمة الطلاب',
@@ -288,6 +292,18 @@ return [
         'arabic'   => 'العربية',
         'english'  => 'English',
         'switch'   => 'تغيير اللغة',
+    ],
+
+    // ── Errors ───────────────────────────────────────────────
+    // PREP-6: Used by RoleMiddleware abort() and error page views.
+    'errors' => [
+        'forbidden'            => 'ليس لديك صلاحية الوصول إلى هذه الصفحة.',
+        'forbidden_title'      => 'وصول مرفوض',
+        'forbidden_message'    => 'ليس لديك صلاحية الوصول إلى هذه الصفحة.',
+        'not_found_title'      => 'الصفحة غير موجودة',
+        'not_found_message'    => 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+        'server_error_title'   => 'خطأ في الخادم',
+        'server_error_message' => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.',
     ],
 
 ];

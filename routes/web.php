@@ -55,10 +55,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/academic-years',                [AcademicYearController::class, 'index'])->name('academic-years.index');
         Route::get('/academic-years/create',         [AcademicYearController::class, 'create'])->name('academic-years.create');
         Route::post('/academic-years',               [AcademicYearController::class, 'store'])->name('academic-years.store');
-        Route::get('/academic-years/{id}/edit',      [AcademicYearController::class, 'edit'])->name('academic-years.edit');
-        Route::put('/academic-years/{id}',           [AcademicYearController::class, 'update'])->name('academic-years.update');
-        Route::post('/academic-years/{id}/activate', [AcademicYearController::class, 'activate'])->name('academic-years.activate');
-        Route::delete('/academic-years/{id}',        [AcademicYearController::class, 'destroy'])->name('academic-years.destroy');
+        Route::get('/academic-years/{academicYear}/edit',      [AcademicYearController::class, 'edit'])->name('academic-years.edit');
+        Route::put('/academic-years/{academicYear}',           [AcademicYearController::class, 'update'])->name('academic-years.update');
+        Route::post('/academic-years/{academicYear}/activate', [AcademicYearController::class, 'activate'])->name('academic-years.activate');
+        Route::delete('/academic-years/{academicYear}',        [AcademicYearController::class, 'destroy'])->name('academic-years.destroy');
 
         // Doctor assignments — requires an active academic year
         Route::middleware('active.year')->group(function () {
@@ -77,14 +77,14 @@ Route::middleware('auth')->group(function () {
 // ─── Student guard (separate guard) ──────────────────────────────────────────
 // Activate + Login are EXCLUDED from active.year — students can only be blocked
 // at activation time (Task 08), not at the login form level.
-Route::middleware('guest:student')->group(function () {
+Route::middleware(['guest:student', 'throttle:10,1'])->group(function () {
     Route::get('/student/activate',  [StudentAuthController::class, 'showActivateForm'])->name('student.activate');
     Route::post('/student/activate', [StudentAuthController::class, 'activate'])->name('student.activate.submit');
     Route::get('/student/login',     [StudentAuthController::class, 'showLoginForm'])->name('student.login');
     Route::post('/student/login',    [StudentAuthController::class, 'login'])->name('student.login.submit');
 });
 
-Route::middleware('auth:student')->group(function () {
+Route::middleware(['auth:student', 'student.year.active'])->group(function () {
     Route::post('/student/logout',    [StudentAuthController::class, 'logout'])->name('student.logout');
 
     // Student dashboard requires an active year
@@ -111,6 +111,7 @@ Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level'])
         Route::post('/students/import',      [StudentController::class, 'import'])    ->name('students.import.store');
         Route::get('/students/export',       [StudentController::class, 'export'])    ->name('students.export');
         Route::delete('/students/{student}', [StudentController::class, 'destroy'])   ->name('students.destroy');
+        Route::post('/students/{student}/restore', [StudentController::class, 'restore'])->name('students.restore');
 
         // ── Project Ideas ─────────────────────────────────────────────────────
         Route::get('/ideas',             [ProjectIdeaController::class, 'index']) ->name('ideas.index');

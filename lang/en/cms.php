@@ -251,6 +251,7 @@ return [
         'activated_success'     => 'Account activated successfully.',
         'account_inactive'      => 'Account is not activated.',
         'invalid_credentials'   => 'Invalid credentials.',
+        'year_not_active'       => 'Your account is not active for the current academic year.',
         // Sprint 2
         'import_title'          => 'Import Students',
         'import_btn'            => 'Import Excel',
@@ -260,6 +261,9 @@ return [
         'filter_all'            => 'All',
         'filter_activated'      => 'Activated',
         'filter_not_activated'  => 'Not Activated',
+        'filter_trashed'        => 'Deleted',
+        'restore'               => 'Restore',
+        'restore_success'       => 'Student restored successfully.',
         'delete_success'        => 'Student removed successfully.',
         'no_students'           => 'No students found for this level and academic year.',
         'list_title'            => 'Students List',
@@ -288,6 +292,18 @@ return [
         'arabic'   => 'العربية',
         'english'  => 'English',
         'switch'   => 'Switch Language',
+    ],
+
+    // ── Errors ───────────────────────────────────────────────
+    // PREP-6: Used by RoleMiddleware abort() and error page views.
+    'errors' => [
+        'forbidden'            => 'You do not have permission to access this page.',
+        'forbidden_title'      => 'Access Forbidden',
+        'forbidden_message'    => 'You do not have permission to access this page.',
+        'not_found_title'      => 'Page Not Found',
+        'not_found_message'    => 'The page you are looking for does not exist or has been moved.',
+        'server_error_title'   => 'Internal Server Error',
+        'server_error_message' => 'Something went wrong on our end. Please try again later.',
     ],
 
 ];

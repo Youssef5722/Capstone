@@ -57,7 +57,7 @@
             <div class="mb-4">
                 <label class="form-label" for="ideaDescription">
                     {{ __('cms.doctor.idea_description') }}
-                    <span style="color:var(--cms-text-muted);font-size:.8rem;">({{ __('cms.general.cancel') }} — optional)</span>
+                    <span style="color:var(--cms-text-muted);font-size:.8rem;">({{ __('cms.general.optional') }})</span>
                 </label>
                 <textarea class="form-control @error('description') is-invalid @enderror"
                           name="description"

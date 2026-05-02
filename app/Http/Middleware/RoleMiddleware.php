@@ -19,7 +19,8 @@ class RoleMiddleware
         $user = Auth::user();
 
         if (!$user || $user->role?->name !== $role) {
-            abort(403, 'ليس لديك صلاحية الوصول إلى هذه الصفحة.');
+            // PREP-6: Localised — respects active locale (ar/en).
+            abort(403, __('cms.errors.forbidden'));
         }
 
         return $next($request);

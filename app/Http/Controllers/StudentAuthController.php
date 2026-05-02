@@ -66,10 +66,11 @@ class StudentAuthController extends Controller
         }
 
         $s->update([
-            'email'           => $request->email,
-            'password'        => Hash::make($request->password),
-            'is_active'       => true,
-            'activation_code' => null,
+            'email'                      => $request->email,
+            'password'                   => Hash::make($request->password),
+            'is_active'                  => true,
+            'activation_code'            => null,
+            'activation_code_expires_at' => null,
         ]);
 
         return redirect()->route('student.login')
@@ -80,9 +81,20 @@ class StudentAuthController extends Controller
         if (!Auth::guard('student')->attempt($request->only('email','password')))
             return back()->withErrors(['email' => __('cms.student.invalid_credentials')])->withInput();
         
-        if (!Auth::guard('student')->user()->is_active) {
+        $student = Auth::guard('student')->user();
+
+        if (!$student->is_active) {
             Auth::guard('student')->logout();
             return back()->withErrors(['email' => __('cms.student.account_inactive')]);
+        }
+
+        $activeYear = AcademicYear::active();
+
+        if (!$activeYear || $student->academic_year_id !== $activeYear->id) {
+            Auth::guard('student')->logout();
+            return back()->withErrors([
+                'email' => __('cms.student.year_not_active')
+            ]);
         }
         
         $request->session()->regenerate();

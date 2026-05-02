@@ -20,15 +20,19 @@ class AcademicYearService
      * Activate the given year inside a transaction.
      * All other years are deactivated first, so we can never end up
      * with zero active years if the second UPDATE fails.
+     *
+     * PREP-1: Accepts the AcademicYear model directly — the Controller
+     * resolves it via Route Model Binding, so findOrFail() is no longer
+     * needed here.
      */
-    public function activateYear(int $id): void
+    public function activateYear(AcademicYear $academicYear): void
     {
-        DB::transaction(function () use ($id) {
+        DB::transaction(function () use ($academicYear) {
             // 1. Deactivate every year
             AcademicYear::query()->update(['is_active' => false]);
 
-            // 2. Activate only the target year
-            AcademicYear::findOrFail($id)->update(['is_active' => true]);
+            // 2. Activate only the target year using the already-resolved model
+            $academicYear->update(['is_active' => true]);
 
             // Note: related data (students, doctor_assignments, project_ideas)
             // is intentionally left untouched — it remains as historical data.
@@ -46,9 +50,13 @@ class AcademicYearService
             return false;
         }
 
-        // students() and projectIdeas() checks will be added in Sprint 2.
-        // Placeholder queries use the relationship names that will be defined later.
-        // For now we only guard on doctor_assignments.
+        if ($year->students()->exists()) {
+            return false;
+        }
+
+        if ($year->projectIdeas()->exists()) {
+            return false;
+        }
 
         return true;
     }

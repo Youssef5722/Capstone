@@ -13,9 +13,12 @@ class DashboardController extends Controller
     {
         $doctor = Auth::user();
 
-        $activeYear = AcademicYear::where('is_active', true)->first();
+        $activeYear = AcademicYear::active();
 
-        $assignments = DoctorAssignment::with('level')
+        $assignments = DoctorAssignment::with([
+            'level',
+            'level.students' => fn($q) => $q->where('academic_year_id', optional($activeYear)->id),
+        ])
             ->where('doctor_id', $doctor->id)
             ->where('academic_year_id', optional($activeYear)->id)
             ->get();
