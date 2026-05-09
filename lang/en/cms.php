@@ -306,4 +306,125 @@ return [
         'server_error_message' => 'Something went wrong on our end. Please try again later.',
     ],
 
+    // ── Teams (Sprint 3) ─────────────────────────────────────────────────────
+    'teams' => [
+        // Page titles
+        'index_title'               => 'Team Management',
+        'create_title'              => 'Create Team',
+        'edit_title'                => 'Edit Team',
+        'distribute_title'          => 'Auto-Distribute Students',
+        'preview_title'             => 'Distribution Preview',
+        'requests_title'            => 'Change Requests',
+        'my_team_title'             => 'My Team',
+
+        // Descriptions
+        'index_intro'               => 'Manage teams for level: :level',
+        'distribute_intro'          => 'Automatically assign unassigned students into teams for level: :level',
+        'requests_intro'            => 'Review change requests submitted by team leaders for level: :level',
+
+        // Buttons
+        'create_btn'                => 'Create Team',
+        'distribute_btn'            => 'Auto-Distribute',
+        'preview_btn'               => 'Preview Distribution',
+        'confirm_btn'               => 'Confirm & Create Teams',
+        'approve_btn'               => 'Approve',
+        'reject_btn'                => 'Reject',
+        'submit_request_btn'        => 'Submit Request',
+        'submit_request_title'      => 'Submit Change Request',
+        'add_members'               => 'Add Members',
+
+        // Fields
+        'name'                      => 'Team Name',
+        'name_placeholder'          => 'e.g. Team Alpha',
+        'name_hint'                 => 'Optional — can be set later via a leader request.',
+        'leader'                    => 'Leader',
+        'members'                   => 'Members',
+        'members_count'             => 'Members',
+        'members_hint'              => 'Select all students to include in this team.',
+        'project'                   => 'Project',
+        'team_size'                 => 'Team Size',
+        'team_size_hint'            => 'Number of students per team (2–20).',
+        'mode'                      => 'Distribution Mode',
+        'mode_balanced'             => 'Balanced',
+        'mode_balanced_hint'        => 'Distributes all students evenly — no remainder.',
+        'mode_fixed'                => 'Fixed Size',
+        'mode_fixed_hint'           => 'Creates groups of exact size; remainder shown separately.',
+        'unassigned_students'       => 'Unassigned Students',
+        'all_assigned'              => 'All students in this level are already assigned to a team.',
+        'unnamed'                   => 'Unnamed Team',
+
+        // Distribution preview
+        'groups_to_create'          => 'Groups to Create',
+        'students_to_assign'        => 'Students to Assign',
+        'remaining_students'        => 'Remaining Students',
+        'remaining_note'            => 'These students were not placed in a full group (fixed mode). Assign them manually after confirming.',
+        'generated_groups'          => 'Generated Groups',
+        'group_n'                   => 'Group :n',
+        'auto_leader'               => 'Auto Leader',
+        'preview_intro'             => 'Review the generated distribution before committing to the database.',
+
+        // Status
+        'status_pending'            => 'Pending',
+        'status_approved'           => 'Approved',
+        'status_rejected'           => 'Rejected',
+
+        // Requests
+        'request_team'              => 'Team',
+        'requester'                 => 'Requested By',
+        'requested_name'            => 'Requested Name',
+        'requested_project'         => 'Requested Project',
+        'request_status'            => 'Status',
+        'request_history'           => 'Request History',
+        'request_name_hint'         => 'Leave blank if you only want to change the project.',
+        'request_at_least_one'      => 'You must request at least one change (name or project).',
+        'no_change'                 => '— No change —',
+        'reviewed_at'               => 'Reviewed: :date',
+        'pending_request_notice'    => 'You already have a pending request. Wait for the doctor to review it before submitting another.',
+
+        // Student team page
+        'not_assigned_title'        => 'Not Assigned to a Team',
+        'not_assigned_desc'         => 'You have not been assigned to a team yet. Contact your doctor for assistance.',
+        'assigned_project'          => 'Assigned Project',
+        'no_project_yet'            => 'No project assigned yet.',
+        'no_project'                => 'No project',
+        'you_are_leader'            => 'You are the Leader',
+        'edit_details'              => 'Edit Team Details',
+        'no_members'                => 'No members in this team yet.',
+        'only_leader_can_request'   => 'Only the team leader can submit change requests.',
+
+        // Flash messages
+        'created_success'           => 'Team created successfully.',
+        'updated_success'           => 'Team updated successfully.',
+        'deleted_success'           => 'Team deleted successfully.',
+        'member_removed'            => 'Member removed from team.',
+        'distribute_success'        => 'Students distributed into teams successfully.',
+        'distribute_session_expired'=> 'Distribution session expired. Please start over.',
+        'distribute_no_data'        => 'No distribution data found. Please generate a preview first.',
+        'distribute_conflict'       => 'A student is already assigned to a team. The distribution was rolled back.',
+        'request_submitted'         => 'Your change request has been submitted successfully.',
+        'request_approved'          => 'Request approved and changes applied.',
+        'request_rejected'          => 'Request rejected.',
+
+        // Validation / service errors
+        'student_wrong_level'       => 'One or more students do not belong to this level and academic year.',
+        'student_already_assigned'  => 'Student ":name" is already assigned to a team this year.',
+        'cannot_remove_leader'      => 'Cannot remove the leader. Reassign leadership first.',
+        'leader_not_member'         => 'The selected leader is not a member of this team.',
+        'pending_request_exists'    => 'This team already has a pending request. Wait for it to be reviewed.',
+        'project_wrong_level'       => 'The selected project does not belong to this level and academic year.',
+        'no_unassigned_students'    => 'All students in this level are already assigned to teams.',
+        'no_teams'                  => 'No teams found. Create one manually or use auto-distribute.',
+        'no_requests'               => 'No change requests found for this level.',
+        'select_leader'             => '— Select a leader —',
+        'leader_required'           => 'A team leader is required.',
+        'members_required'          => 'At least one member must be selected.',
+
+        // Confirmations
+        'confirm_delete'            => 'Are you sure you want to delete this team? All members will be unassigned.',
+        'confirm_remove_member'     => 'Remove this student from the team?',
+        'confirm_distribute'        => 'This will permanently create these teams and assign students. Continue?',
+        'confirm_approve_request'   => 'Approve this request and apply the changes?',
+        'confirm_reject_request'    => 'Reject this request?',
+    ],
+
 ];

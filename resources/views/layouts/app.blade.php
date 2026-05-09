@@ -134,8 +134,11 @@
         <a href="{{ route('doctor.ideas.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.ideas.*') ? 'active' : '' }}">
             <i class="bi bi-lightbulb"></i> Project Ideas
         </a>
-        <a href="#" class="cms-nav-item text-muted" style="opacity: 0.5; pointer-events: none;" tabindex="-1" aria-disabled="true">
-            <i class="bi bi-diagram-3"></i> Team Management (soon)
+        <a href="{{ route('doctor.teams.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.teams.*') ? 'active' : '' }}">
+            <i class="bi bi-diagram-3"></i> {{ __('cms.teams.index_title') }}
+        </a>
+        <a href="{{ route('doctor.requests.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.requests.*') ? 'active' : '' }}">
+            <i class="bi bi-inbox"></i> {{ __('cms.teams.requests_title') }}
         </a>
 
         <span class="cms-nav-section" style="margin-top: 1rem;">{{ __('cms.general.actions') ?? 'Actions' }}</span>
@@ -149,6 +152,9 @@
         <span class="cms-nav-section">{{ __('cms.nav.dashboard') }}</span>
         <a href="{{ route('student.dashboard') }}" class="cms-nav-item {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid-1x2-fill"></i> {{ __('cms.nav.dashboard') }}
+        </a>
+        <a href="{{ route('student.team.show') }}" class="cms-nav-item {{ request()->routeIs('student.team.*') ? 'active' : '' }}">
+            <i class="bi bi-diagram-3"></i> {{ __('cms.teams.my_team_title') }}
         </a>
         @endif
 

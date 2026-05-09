@@ -157,6 +157,11 @@ return [
         'end_date'        => 'End Date',
         'activation_code' => 'Activation Code',
         'levels'          => 'Levels',
+        'requested_name'  => 'Requested Name',
+        'project_idea_id' => 'Project',
     ],
+
+    // ── Sprint 3 custom keys ─────────────────────────────────────────────────
+    'team_request_empty_change' => 'You must specify at least one change: a new team name or a project idea.',
 
 ];

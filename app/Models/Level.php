@@ -18,4 +18,11 @@ class Level extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    // ── Sprint 3 Relationships ─────────────────────────────────────────────────
+
+    public function teams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
 }

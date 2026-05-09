@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProjectIdea extends Model
 {
@@ -30,5 +31,12 @@ class ProjectIdea extends Model
     public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class);
+    }
+
+    // ── Sprint 3 Relationships ─────────────────────────────────────────────────
+
+    public function teamRequests(): HasMany
+    {
+        return $this->hasMany(TeamRequest::class);
     }
 }

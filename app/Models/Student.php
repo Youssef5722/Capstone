@@ -24,4 +24,22 @@ class Student extends Authenticatable
 
     public function level()        { return $this->belongsTo(Level::class); }
     public function academicYear() { return $this->belongsTo(AcademicYear::class); }
+
+    // ── Sprint 3 Relationships ─────────────────────────────────────────────────
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_student')
+                    ->withPivot(['academic_year_id']);
+    }
+
+    public function leaderOf()
+    {
+        return $this->hasMany(Team::class, 'leader_id');
+    }
+
+    public function teamRequests()
+    {
+        return $this->hasMany(TeamRequest::class, 'requested_by');
+    }
 }

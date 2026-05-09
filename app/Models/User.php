@@ -39,4 +39,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(DoctorAssignment::class, 'doctor_id');
     }
+
+    // ── Sprint 3 Relationships ─────────────────────────────────────────────────
+
+    public function reviewedRequests()
+    {
+        return $this->hasMany(TeamRequest::class, 'reviewed_by');
+    }
 }

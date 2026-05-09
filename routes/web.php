@@ -122,3 +122,41 @@ Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level'])
         Route::delete('/ideas/{idea}',   [ProjectIdeaController::class, 'destroy'])->name('ideas.destroy');
     });
 
+// ─── Sprint 3: Teams, Distribution & Requests (Doctor) ───────────────────────
+
+use App\Http\Controllers\Doctor\TeamController;
+use App\Http\Controllers\Doctor\TeamDistributionController;
+use App\Http\Controllers\Doctor\TeamRequestController;
+use App\Http\Controllers\Student\TeamController as StudentTeamController;
+
+Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level'])
+    ->prefix('doctor/{level}')
+    ->name('doctor.')
+    ->group(function () {
+
+        // ── Teams CRUD ────────────────────────────────────────────────────────
+        Route::get('/teams',                       [TeamController::class, 'index'])  ->name('teams.index');
+        Route::get('/teams/distribute',            [TeamDistributionController::class, 'showForm']) ->name('teams.distribute');
+        Route::post('/teams/distribute/preview',   [TeamDistributionController::class, 'preview'])  ->name('teams.distribute.preview');
+        Route::post('/teams/distribute/confirm',   [TeamDistributionController::class, 'confirm'])  ->name('teams.distribute.confirm');
+        Route::get('/teams/create',                [TeamController::class, 'create']) ->name('teams.create');
+        Route::post('/teams',                      [TeamController::class, 'store'])  ->name('teams.store');
+        Route::get('/teams/{team}/edit',           [TeamController::class, 'edit'])   ->name('teams.edit');
+        Route::post('/teams/{team}',               [TeamController::class, 'update']) ->name('teams.update');
+        Route::post('/teams/{team}/remove/{student}', [TeamController::class, 'removeMember'])->name('teams.remove_member');
+        Route::post('/teams/{team}/delete',        [TeamController::class, 'destroy'])->name('teams.destroy');
+
+        // ── Requests ──────────────────────────────────────────────────────────
+        Route::get('/requests',                         [TeamRequestController::class, 'index'])  ->name('requests.index');
+        Route::post('/requests/{teamRequest}/approve',  [TeamRequestController::class, 'approve'])->name('requests.approve');
+        Route::post('/requests/{teamRequest}/reject',   [TeamRequestController::class, 'reject']) ->name('requests.reject');
+    });
+
+// ─── Sprint 3: Student Team Routes ────────────────────────────────────────────
+
+Route::middleware(['auth:student', 'student.year.active', 'active.year'])
+    ->group(function () {
+        Route::get('/student/team',         [StudentTeamController::class, 'show'])          ->name('student.team.show');
+        Route::post('/student/team/request',[StudentTeamController::class, 'submitRequest']) ->name('student.team.request');
+    });
+

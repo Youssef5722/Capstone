@@ -43,4 +43,11 @@ class AcademicYear extends Model
     {
         return $this->hasMany(ProjectIdea::class);
     }
+
+    // ── Sprint 3 Relationships ─────────────────────────────────────────────────
+
+    public function teams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
 }

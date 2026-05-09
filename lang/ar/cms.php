@@ -306,4 +306,125 @@ return [
         'server_error_message' => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.',
     ],
 
+    // ── Teams (Sprint 3) ─────────────────────────────────────────────────────
+    'teams' => [
+        // Page titles
+        'index_title'               => 'إدارة الفرق',
+        'create_title'              => 'إنشاء فريق',
+        'edit_title'                => 'تعديل الفريق',
+        'distribute_title'          => 'التوزيع التلقائي للطلاب',
+        'preview_title'             => 'معاينة التوزيع',
+        'requests_title'            => 'طلبات التعديل',
+        'my_team_title'             => 'فريقي',
+
+        // Descriptions
+        'index_intro'               => 'إدارة فرق المستوى: :level',
+        'distribute_intro'          => 'توزيع الطلاب غير المعينين تلقائياً في المستوى: :level',
+        'requests_intro'            => 'مراجعة طلبات التعديل المقدَّمة من قادة الفرق للمستوى: :level',
+
+        // Buttons
+        'create_btn'                => 'إنشاء فريق',
+        'distribute_btn'            => 'توزيع تلقائي',
+        'preview_btn'               => 'معاينة التوزيع',
+        'confirm_btn'               => 'تأكيد وإنشاء الفرق',
+        'approve_btn'               => 'موافقة',
+        'reject_btn'                => 'رفض',
+        'submit_request_btn'        => 'إرسال الطلب',
+        'submit_request_title'      => 'إرسال طلب تعديل',
+        'add_members'               => 'إضافة أعضاء',
+
+        // Fields
+        'name'                      => 'اسم الفريق',
+        'name_placeholder'          => 'مثال: فريق ألفا',
+        'name_hint'                 => 'اختياري — يمكن تعيينه لاحقاً عبر طلب من قائد الفريق.',
+        'leader'                    => 'القائد',
+        'members'                   => 'الأعضاء',
+        'members_count'             => 'الأعضاء',
+        'members_hint'              => 'اختر جميع الطلاب المراد تضمينهم في هذا الفريق.',
+        'project'                   => 'المشروع',
+        'team_size'                 => 'حجم الفريق',
+        'team_size_hint'            => 'عدد الطلاب في كل فريق (2–20).',
+        'mode'                      => 'طريقة التوزيع',
+        'mode_balanced'             => 'متوازن',
+        'mode_balanced_hint'        => 'يوزع جميع الطلاب بالتساوي دون فائض.',
+        'mode_fixed'                => 'حجم ثابت',
+        'mode_fixed_hint'           => 'ينشئ مجموعات بحجم محدد؛ الطلاب الفائضون يُعرضون منفصلين.',
+        'unassigned_students'       => 'طلاب غير معينين',
+        'all_assigned'              => 'جميع طلاب هذا المستوى معينون بالفعل في فرق.',
+        'unnamed'                   => 'فريق بلا اسم',
+
+        // Distribution preview
+        'groups_to_create'          => 'مجموعات ستُنشأ',
+        'students_to_assign'        => 'طلاب سيُعينون',
+        'remaining_students'        => 'الطلاب الفائضون',
+        'remaining_note'            => 'لم يُضم هؤلاء الطلاب إلى مجموعة كاملة (وضع الحجم الثابت). يمكن تعيينهم يدوياً بعد التأكيد.',
+        'generated_groups'          => 'المجموعات المُولَّدة',
+        'group_n'                   => 'المجموعة :n',
+        'auto_leader'               => 'قائد تلقائي',
+        'preview_intro'             => 'راجع التوزيع المُولَّد قبل حفظه في قاعدة البيانات.',
+
+        // Status
+        'status_pending'            => 'معلق',
+        'status_approved'           => 'مقبول',
+        'status_rejected'           => 'مرفوض',
+
+        // Requests
+        'request_team'              => 'الفريق',
+        'requester'                 => 'مقدَّم من',
+        'requested_name'            => 'الاسم المطلوب',
+        'requested_project'         => 'المشروع المطلوب',
+        'request_status'            => 'الحالة',
+        'request_history'           => 'سجل الطلبات',
+        'request_name_hint'         => 'اتركه فارغاً إن أردت تغيير المشروع فقط.',
+        'request_at_least_one'      => 'يجب تحديد تعديل واحد على الأقل (الاسم أو المشروع).',
+        'no_change'                 => '— بدون تغيير —',
+        'reviewed_at'               => 'تمت المراجعة: :date',
+        'pending_request_notice'    => 'لديك طلب معلق بالفعل. انتظر حتى يراجعه الدكتور قبل إرسال طلب آخر.',
+
+        // Student team page
+        'not_assigned_title'        => 'لم يتم تعيينك في فريق',
+        'not_assigned_desc'         => 'لم يتم تعيينك في فريق حتى الآن. تواصل مع دكتورك للمساعدة.',
+        'assigned_project'          => 'المشروع المعين',
+        'no_project_yet'            => 'لم يتم تعيين مشروع بعد.',
+        'no_project'                => 'لا يوجد مشروع',
+        'you_are_leader'            => 'أنت القائد',
+        'edit_details'              => 'تعديل بيانات الفريق',
+        'no_members'                => 'لا يوجد أعضاء في هذا الفريق حتى الآن.',
+        'only_leader_can_request'   => 'فقط قائد الفريق يمكنه إرسال طلبات التعديل.',
+
+        // Flash messages
+        'created_success'           => 'تم إنشاء الفريق بنجاح.',
+        'updated_success'           => 'تم تعديل الفريق بنجاح.',
+        'deleted_success'           => 'تم حذف الفريق بنجاح.',
+        'member_removed'            => 'تم إزالة العضو من الفريق.',
+        'distribute_success'        => 'تم توزيع الطلاب في فرق بنجاح.',
+        'distribute_session_expired'=> 'انتهت صلاحية جلسة التوزيع. يرجى البدء من جديد.',
+        'distribute_no_data'        => 'لم يتم العثور على بيانات توزيع. يرجى إنشاء معاينة أولاً.',
+        'distribute_conflict'       => 'أحد الطلاب معين بالفعل في فريق. تم التراجع عن التوزيع.',
+        'request_submitted'         => 'تم إرسال طلب التعديل بنجاح.',
+        'request_approved'          => 'تمت الموافقة على الطلب وتطبيق التغييرات.',
+        'request_rejected'          => 'تم رفض الطلب.',
+
+        // Validation / service errors
+        'student_wrong_level'       => 'أحد الطلاب أو أكثر لا ينتمون إلى هذا المستوى والسنة الأكاديمية.',
+        'student_already_assigned'  => 'الطالب ":name" معين بالفعل في فريق هذا العام.',
+        'cannot_remove_leader'      => 'لا يمكن إزالة القائد. يجب تغيير القيادة أولاً.',
+        'leader_not_member'         => 'القائد المختار ليس عضواً في هذا الفريق.',
+        'pending_request_exists'    => 'هذا الفريق لديه طلب معلق بالفعل. انتظر حتى تتم مراجعته.',
+        'project_wrong_level'       => 'المشروع المختار لا ينتمي إلى هذا المستوى والسنة الأكاديمية.',
+        'no_unassigned_students'    => 'جميع طلاب هذا المستوى معينون بالفعل في فرق.',
+        'no_teams'                  => 'لا توجد فرق. أنشئ فريقاً يدوياً أو استخدم التوزيع التلقائي.',
+        'no_requests'               => 'لا توجد طلبات تعديل لهذا المستوى.',
+        'select_leader'             => '— اختر القائد —',
+        'leader_required'           => 'يجب تحديد قائد للفريق.',
+        'members_required'          => 'يجب اختيار عضو واحد على الأقل.',
+
+        // Confirmations
+        'confirm_delete'            => 'هل أنت متأكد من حذف هذا الفريق؟ سيُلغى تعيين جميع الأعضاء.',
+        'confirm_remove_member'     => 'إزالة هذا الطالب من الفريق؟',
+        'confirm_distribute'        => 'سيؤدي هذا إلى إنشاء هذه الفرق وتعيين الطلاب بشكل نهائي. هل تريد المتابعة؟',
+        'confirm_approve_request'   => 'الموافقة على هذا الطلب وتطبيق التغييرات؟',
+        'confirm_reject_request'    => 'رفض هذا الطلب؟',
+    ],
+
 ];
