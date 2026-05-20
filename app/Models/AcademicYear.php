@@ -18,15 +18,26 @@ class AcademicYear extends Model
     }
 
     // ── Static helper ─────────────────────────────────────────
+
+    /** In-memory cache for active(). Class-level so tests can reset it. */
+    private static ?self $activeCache = null;
+
     /**
      * Return the currently active academic year (or null).
      */
     public static function active(): ?self
     {
-        static $cache = null;
-
-        return $cache ??= static::where('is_active', true)->first();
+        return self::$activeCache ??= static::where('is_active', true)->first();
     }
+
+    /**
+     * Reset the active() cache. Call this in tests after changing is_active.
+     */
+    public static function clearActiveCache(): void
+    {
+        self::$activeCache = null;
+    }
+
 
     // ── Relationships ──────────────────────────────────────────
     public function doctorAssignments(): HasMany
