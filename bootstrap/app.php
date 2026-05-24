@@ -12,10 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'role'         => \App\Http\Middleware\RoleMiddleware::class,
-            'active.year'  => \App\Http\Middleware\EnsureAcademicYearActive::class,
-            'doctor.level' => \App\Http\Middleware\EnsureDoctorLevelAccess::class,
-            'student.year.active' => \App\Http\Middleware\EnsureStudentYearActive::class,
+            'role'                 => \App\Http\Middleware\RoleMiddleware::class,
+            'active.year'          => \App\Http\Middleware\EnsureAcademicYearActive::class,
+            'doctor.level'         => \App\Http\Middleware\EnsureDoctorLevelAccess::class,
+            'student.year.active'  => \App\Http\Middleware\EnsureStudentYearActive::class,
+            // Sprint 4
+            'can.access.workspace' => \App\Http\Middleware\EnsureDoctorWorkspaceAccess::class,
+            'in.team'              => \App\Http\Middleware\EnsureStudentInTeam::class,
         ]);
 
         $middleware->web(append: [

@@ -66,6 +66,8 @@ class TeamRequestService
      *
      * ⚠️ CRITICAL: Only update team name if requested_name is NOT null.
      * A null requested_name must never overwrite the current team name.
+     *
+     * Sprint 4: If a project_idea_id is approved, auto-create a Workspace for the team.
      */
     public function approve(TeamRequest $request, User $doctor): void
     {
@@ -83,6 +85,9 @@ class TeamRequestService
                     ['team_id' => $team->id],
                     ['project_idea_id' => $request->project_idea_id]
                 );
+
+                // Sprint 4: auto-create a Workspace for the team (idempotent)
+                (new \App\Services\WorkspaceService())->createForTeam($team);
             }
 
             $request->update([

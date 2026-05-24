@@ -39,9 +39,9 @@
     </div>
     <div class="cms-card-body">
         @if($teams->isEmpty())
-            <div style="text-align:center;padding:4rem 1rem;">
-                <i class="bi bi-diagram-3" style="font-size:3rem;color:var(--cms-text-muted);display:block;margin-bottom:1rem;"></i>
-                <p style="color:var(--cms-text-muted);font-size:1.1rem;">{{ __('cms.teams.no_teams') }}</p>
+            <div class="cms-empty-state">
+                <i class="bi bi-diagram-3"></i>
+                <p>{{ __('cms.teams.no_teams') }}</p>
                 <a href="{{ route('doctor.teams.create', $level) }}" class="cms-btn cms-btn-primary mt-2">
                     <i class="bi bi-plus-lg"></i> {{ __('cms.teams.create_btn') }}
                 </a>
@@ -71,26 +71,26 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                <span class="fw-semibold" style="color:var(--cms-text);">
+                                <span class="fw-semibold" style="color:var(--text-primary);">
                                     {{ $team->name ?? '—' }}
                                 </span>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="user-avatar" style="width:30px;height:30px;font-size:.75rem;">
-                                        {{ strtoupper(substr($team->leader?->name ?? '?', 0, 1)) }}
+                                        {{ mb_strtoupper(mb_substr($team->leader?->name ?? '?', 0, 1, 'UTF-8'), 'UTF-8') }}
                                     </div>
                                     {{ $team->leader?->name ?? '—' }}
                                 </div>
                             </td>
                             <td>
-                                <span class="cms-badge cms-badge-info">{{ $team->students->count() }}</span>
+                                <span class="cms-badge cms-badge-purple">{{ $team->students->count() }}</span>
                             </td>
                             <td>
                                 @if($project)
                                     <span class="cms-badge cms-badge-success">{{ Str::limit($project->title, 30) }}</span>
                                 @else
-                                    <span style="color:var(--cms-text-muted);font-size:.85rem;">{{ __('cms.teams.no_project') }}</span>
+                                    <span style="color:var(--text-faint);font-size:.85rem;">{{ __('cms.teams.no_project') }}</span>
                                 @endif
                             </td>
                             <td>

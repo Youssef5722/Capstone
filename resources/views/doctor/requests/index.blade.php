@@ -26,15 +26,15 @@
             {{ __('cms.teams.requests_title') }}
             @php $pendingCount = $requests->where('status','pending')->count(); @endphp
             @if($pendingCount > 0)
-                <span class="badge bg-warning text-dark ms-2">{{ $pendingCount }}</span>
+                <span class="cms-badge cms-badge-warning ms-2">{{ $pendingCount }} pending</span>
             @endif
         </h3>
     </div>
     <div class="cms-card-body">
         @if($requests->isEmpty())
-            <div style="text-align:center;padding:3rem 1rem;">
-                <i class="bi bi-inbox" style="font-size:3rem;color:var(--cms-text-muted);display:block;margin-bottom:1rem;"></i>
-                <p style="color:var(--cms-text-muted);font-size:1.05rem;">{{ __('cms.teams.no_requests') }}</p>
+            <div class="cms-empty-state">
+                <i class="bi bi-inbox"></i>
+                <p>{{ __('cms.teams.no_requests') }}</p>
             </div>
         @else
             <div class="table-responsive">
@@ -58,16 +58,16 @@
                             <td>{{ $req->requester?->name ?? '—' }}</td>
                             <td>
                                 @if($req->requested_name)
-                                    <span style="color:var(--cms-text);">{{ $req->requested_name }}</span>
+                                    <span style="color:var(--text-primary);">{{ $req->requested_name }}</span>
                                 @else
-                                    <span style="color:var(--cms-text-muted);">—</span>
+                                    <span style="color:var(--text-faint);">—</span>
                                 @endif
                             </td>
                             <td>
                                 @if($req->projectIdea)
-                                    <span class="cms-badge cms-badge-info">{{ Str::limit($req->projectIdea->title, 30) }}</span>
+                                    <span class="cms-badge cms-badge-purple">{{ Str::limit($req->projectIdea->title, 30) }}</span>
                                 @else
-                                    <span style="color:var(--cms-text-muted);">—</span>
+                                    <span style="color:var(--text-faint);">—</span>
                                 @endif
                             </td>
                             <td>
@@ -108,7 +108,7 @@
                                     </form>
                                 </div>
                                 @else
-                                    <span style="color:var(--cms-text-muted);font-size:.85rem;">
+                                    <span style="color:var(--text-faint);font-size:.85rem;">
                                         {{ __('cms.teams.reviewed_at', ['date' => $req->reviewed_at?->format('Y-m-d')]) }}
                                     </span>
                                 @endif

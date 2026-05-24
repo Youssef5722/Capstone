@@ -48,6 +48,13 @@
 
     /* ── Easing ── */
     --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ── Backward-compatible aliases (some views use these names) ── */
+    --cms-text-muted: var(--text-muted);
+    --cms-text:       var(--text-primary);
+    --cms-border:     var(--border-sub);
+    --cms-bg-light:   rgba(255, 255, 255, 0.05);
+    --cms-bg-card:    var(--surface-card);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1270,4 +1277,143 @@ p {
         font-size: 0.78rem;
         padding: 0 0.45rem;
     }
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL UI ENHANCEMENTS
+   ═══════════════════════════════════════════════════ */
+
+/* Smooth page entrance animation */
+.cms-main > * {
+    animation: fadeInUp 0.45s var(--ease-smooth) both;
+}
+
+.cms-main > *:nth-child(1) { animation-delay: 0.05s; }
+.cms-main > *:nth-child(2) { animation-delay: 0.10s; }
+.cms-main > *:nth-child(3) { animation-delay: 0.15s; }
+.cms-main > *:nth-child(4) { animation-delay: 0.20s; }
+.cms-main > *:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Glow pulse on active nav item */
+.cms-nav-item.active {
+    position: relative;
+}
+
+.cms-nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--accent-admin);
+    box-shadow: 0 0 8px rgba(122, 34, 253, 0.6);
+}
+
+[dir="rtl"] .cms-nav-item.active::before {
+    left: auto;
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Nav brand hover glow */
+.cms-brand:hover {
+    color: #c4b5fd;
+}
+
+.cms-brand:hover .cms-brand-dot {
+    box-shadow: 0 0 16px rgba(122, 34, 253, 0.7);
+}
+
+/* Card body padding tweak for uniformity */
+.cms-card-body {
+    padding: 1.75rem;
+}
+
+/* Table hover row highlight improved */
+.cms-table tbody tr {
+    transition: background 0.15s;
+}
+
+.cms-table tbody tr:hover td {
+    background: rgba(122, 34, 253, 0.05);
+    color: var(--text-primary);
+}
+
+/* Better scrollbar globally */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(122, 34, 253, 0.3);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(122, 34, 253, 0.5);
+}
+
+/* Improved cms-btn-secondary */
+.cms-btn-secondary {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    border-color: var(--border-sub);
+}
+
+.cms-btn-secondary:hover {
+    background: rgba(122, 34, 253, 0.1);
+    color: #c4b5fd;
+    border-color: rgba(122, 34, 253, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Flash alert auto-dismiss animation */
+.cms-alert {
+    position: relative;
+}
+
+/* Focus visible ring for accessibility */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid rgba(122, 34, 253, 0.6);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* ── Sidebar nav item improved active left bar ── */
+.cms-sidebar {
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+/* User avatar pulse on hover */
+.cms-user-pill:hover .user-avatar {
+    box-shadow: 0 0 12px rgba(122, 34, 253, 0.5);
+}
+
+/* ── Card entrance hover glow ── */
+.cms-card {
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.cms-card:hover {
+    border-color: rgba(122, 34, 253, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }

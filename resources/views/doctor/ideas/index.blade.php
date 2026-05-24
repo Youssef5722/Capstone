@@ -51,11 +51,11 @@
                         @foreach($ideas as $i => $idea)
                         <tr>
                             <td class="text-muted" style="font-size:.8rem;">{{ $i + 1 }}</td>
-                            <td style="font-weight:600;">{{ $idea->title }}</td>
-                            <td style="color:var(--cms-text-muted);font-size:.9rem;">
+                            <td style="font-weight:600;color:var(--text-primary);">{{ $idea->title }}</td>
+                            <td style="color:var(--text-muted);font-size:.9rem;">
                                 {{ Str::limit($idea->description, 100) ?: '—' }}
                             </td>
-                            <td style="font-size:.8rem;color:var(--cms-text-muted);">
+                            <td style="font-size:.8rem;color:var(--text-faint);">
                                 {{ $idea->created_at->format('d M Y') }}
                             </td>
                             <td>

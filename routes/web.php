@@ -160,3 +160,94 @@ Route::middleware(['auth:student', 'student.year.active', 'active.year'])
         Route::post('/student/team/request',[StudentTeamController::class, 'submitRequest']) ->name('student.team.request');
     });
 
+// ─── Sprint 4: Doctor Workspace Routes ────────────────────────────────────────
+
+use App\Http\Controllers\Doctor\WorkspaceController as DoctorWorkspaceController;
+use App\Http\Controllers\Doctor\PhaseController;
+use App\Http\Controllers\Doctor\TaskController;
+use App\Http\Controllers\Doctor\SubmissionReviewController;
+use App\Http\Controllers\Doctor\TaskCommentController as DoctorTaskCommentController;
+
+// Workspace index (level-scoped, no workspace param yet)
+Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level'])
+    ->prefix('doctor/{level}')
+    ->name('doctor.')
+    ->group(function () {
+        Route::get('/workspaces', [DoctorWorkspaceController::class, 'index'])->name('workspaces.index');
+    });
+
+// Workspace-scoped routes (adds can.access.workspace middleware)
+Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level', 'can.access.workspace'])
+    ->prefix('doctor/{level}/workspaces/{workspace}')
+    ->name('doctor.')
+    ->group(function () {
+
+        // Workspace show
+        Route::get('/', [DoctorWorkspaceController::class, 'show'])->name('workspaces.show');
+
+        // ── Phases ────────────────────────────────────────────────────────────
+        Route::get('/phases/create',         [PhaseController::class, 'create']) ->name('phases.create');
+        Route::post('/phases',               [PhaseController::class, 'store'])  ->name('phases.store');
+        Route::get('/phases/{phase}/edit',   [PhaseController::class, 'edit'])   ->name('phases.edit');
+        Route::put('/phases/{phase}',        [PhaseController::class, 'update']) ->name('phases.update');
+        Route::delete('/phases/{phase}',     [PhaseController::class, 'destroy'])->name('phases.destroy');
+
+        // ── Tasks ─────────────────────────────────────────────────────────────
+        Route::get('/tasks/create',          [TaskController::class, 'create']) ->name('tasks.create');
+        Route::post('/tasks',                [TaskController::class, 'store'])  ->name('tasks.store');
+        Route::get('/tasks/{task}',          [TaskController::class, 'show'])   ->name('tasks.show');
+        Route::put('/tasks/{task}',          [TaskController::class, 'update']) ->name('tasks.update');
+        Route::delete('/tasks/{task}',       [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+        // ── Submission Review (Doctor) ─────────────────────────────────────────
+        Route::post('/tasks/{task}/submissions/{submission}/approve',
+            [SubmissionReviewController::class, 'approve'])->name('submissions.approve');
+        Route::post('/tasks/{task}/submissions/{submission}/reject',
+            [SubmissionReviewController::class, 'reject'])->name('submissions.reject');
+
+        // ── Comments (Doctor) ─────────────────────────────────────────────────
+        Route::post('/tasks/{task}/comments',
+            [DoctorTaskCommentController::class, 'store'])->name('task.comments.store');
+    });
+
+// ─── Sprint 4: Student Workspace Routes ───────────────────────────────────────
+
+use App\Http\Controllers\Student\WorkspaceController as StudentWorkspaceController;
+use App\Http\Controllers\Student\SubTaskController;
+use App\Http\Controllers\Student\SubmissionController;
+use App\Http\Controllers\Student\SubTaskReviewController;
+use App\Http\Controllers\Student\TaskCommentController as StudentTaskCommentController;
+
+Route::middleware(['auth:student', 'student.year.active', 'active.year', 'in.team'])
+    ->prefix('student/workspace')
+    ->name('student.workspace.')
+    ->group(function () {
+
+        // Workspace dashboard
+        Route::get('/', [StudentWorkspaceController::class, 'show'])->name('show');
+
+        // ── Task detail ───────────────────────────────────────────────────────
+        Route::get('/tasks/{task}',          [StudentWorkspaceController::class, 'showTask'])
+            ->name('tasks.show');
+
+        // ── Sub-Task detail ───────────────────────────────────────────────────
+        Route::get('/tasks/{task}/subtasks/{subTask}', [StudentWorkspaceController::class, 'showSubTask'])
+            ->name('subtasks.show');
+
+        // ── Sub-Tasks CRUD (leader only, enforced in service) ─────────────────
+        Route::post('/tasks/{task}/subtasks',              [SubTaskController::class, 'store'])  ->name('subtasks.store');
+        Route::put('/tasks/{task}/subtasks/{subTask}',     [SubTaskController::class, 'update']) ->name('subtasks.update');
+        Route::delete('/tasks/{task}/subtasks/{subTask}',  [SubTaskController::class, 'destroy'])->name('subtasks.destroy');
+
+        // ── File Submissions (polymorphic) ────────────────────────────────────
+        Route::post('/submit', [SubmissionController::class, 'store'])->name('submit');
+
+        // ── Sub-Task Review (leader only) ─────────────────────────────────────
+        Route::post('/tasks/{task}/subtasks/{subTask}/submissions/{submission}/approve',
+            [SubTaskReviewController::class, 'approve'])->name('subtasks.submissions.approve');
+        Route::post('/tasks/{task}/subtasks/{subTask}/submissions/{submission}/reject',
+            [SubTaskReviewController::class, 'reject'])->name('subtasks.submissions.reject');
+
+        // ── Comments (student — polymorphic) ──────────────────────────────────
+        Route::post('/comments', [StudentTaskCommentController::class, 'store'])->name('comments.store');
+    });

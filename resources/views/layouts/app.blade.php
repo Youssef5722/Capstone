@@ -140,6 +140,9 @@
         <a href="{{ route('doctor.requests.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.requests.*') ? 'active' : '' }}">
             <i class="bi bi-inbox"></i> {{ __('cms.teams.requests_title') }}
         </a>
+        <a href="{{ route('doctor.workspaces.index', $level) }}" class="cms-nav-item {{ request()->routeIs('doctor.workspaces.*', 'doctor.phases.*', 'doctor.tasks.*', 'doctor.submissions.*', 'doctor.task.comments.*') ? 'active' : '' }}">
+            <i class="bi bi-grid-3x3-gap-fill"></i> {{ __('cms.workspace.nav') }}
+        </a>
 
         <span class="cms-nav-section" style="margin-top: 1rem;">{{ __('cms.general.actions') ?? 'Actions' }}</span>
         <a href="{{ route('doctor.dashboard') }}" class="cms-nav-item">
@@ -155,6 +158,9 @@
         </a>
         <a href="{{ route('student.team.show') }}" class="cms-nav-item {{ request()->routeIs('student.team.*') ? 'active' : '' }}">
             <i class="bi bi-diagram-3"></i> {{ __('cms.teams.my_team_title') }}
+        </a>
+        <a href="{{ route('student.workspace.show') }}" class="cms-nav-item {{ request()->routeIs('student.workspace.*') ? 'active' : '' }}">
+            <i class="bi bi-grid-3x3-gap-fill"></i> {{ __('cms.workspace.nav') }}
         </a>
         @endif
 

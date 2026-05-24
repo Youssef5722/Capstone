@@ -46,13 +46,37 @@ class Team extends Model
     }
 
     /**
-     * The project idea assigned to this team via the team_project pivot.
-     * Returns a HasOne through a raw join since team_project has no Eloquent model.
+     * Project ideas assigned to this team via the team_project pivot.
+     * This replaces the broken join-based HasOne approach and supports eager loading.
+     * Use the `currentProject` accessor to get the single assigned project idea.
      */
-    public function projectIdea(): HasOne
+    public function projectIdeas(): BelongsToMany
     {
-        return $this->hasOne(ProjectIdea::class, 'id', 'id')
-                    ->join('team_project', 'project_ideas.id', '=', 'team_project.project_idea_id')
-                    ->where('team_project.team_id', $this->id);
+        return $this->belongsToMany(ProjectIdea::class, 'team_project', 'team_id', 'project_idea_id');
+    }
+
+    /**
+     * Accessor: $team->currentProject
+     *
+     * Returns the first (and only) assigned project idea for this team,
+     * or null if none is assigned. Uses the already-loaded 'projectIdeas'
+     * relation when available (avoids N+1 when eager-loaded via `with('projectIdeas')`).
+     *
+     * All existing views that use $team->currentProject continue to work unchanged.
+     */
+    public function getCurrentProjectAttribute(): ?ProjectIdea
+    {
+        if ($this->relationLoaded('projectIdeas')) {
+            return $this->projectIdeas->first();
+        }
+
+        return $this->projectIdeas()->first();
+    }
+
+    // ── Sprint 4 Relationships ─────────────────────────────────────────────────
+
+    public function workspace(): HasOne
+    {
+        return $this->hasOne(Workspace::class);
     }
 }

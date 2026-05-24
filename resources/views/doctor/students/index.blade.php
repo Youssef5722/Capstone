@@ -33,7 +33,7 @@
 <div class="cms-card mb-3">
     <div class="cms-card-body" style="padding:.75rem 1.25rem;">
         <div class="d-flex gap-2 flex-wrap align-items-center">
-            <span style="font-size:.8rem;color:var(--cms-text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+            <span style="font-size:.8rem;color:var(--text-faint);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
                 {{ __('cms.general.search') }}:
             </span>
             <a href="{{ route('doctor.students.index', $level->id) }}"
@@ -52,7 +52,7 @@
                class="cms-badge {{ $filter === 'trashed' ? 'cms-badge-warning' : 'cms-badge-secondary' }}">
                <i class="bi bi-trash me-1"></i>{{ __('cms.student.filter_trashed') }}
             </a>
-            <span class="ms-auto" style="font-size:.8rem;color:var(--cms-text-muted);">
+            <span class="ms-auto" style="font-size:.8rem;color:var(--text-muted);">
                 {{ $students->total() }} {{ __('cms.student.name') }}(s)
             </span>
         </div>
@@ -88,12 +88,12 @@
                                 <span style="font-weight:600;">{{ $student->name }}</span>
                             </td>
                             <td>
-                                <code style="font-size:.85rem;background:var(--cms-bg-light,#1e1e2e);padding:.15rem .4rem;border-radius:.3rem;">
+                                <code style="font-size:.85rem;background:rgba(255,255,255,0.05);padding:.15rem .5rem;border-radius:.3rem;color:#a78bfa;">
                                     {{ $student->university_id }}
                                 </code>
                             </td>
                             <td>
-                                <code style="font-size:.85rem;letter-spacing:.05em;background:var(--cms-bg-light,#1e1e2e);padding:.15rem .4rem;border-radius:.3rem;">
+                                <code style="font-size:.85rem;letter-spacing:.1em;background:rgba(255,255,255,0.05);padding:.2rem .55rem;border-radius:.3rem;color:#0AFFFF;font-family:'Courier New',monospace;">
                                     {{ $student->activation_code ?? '—' }}
                                 </code>
                             </td>
