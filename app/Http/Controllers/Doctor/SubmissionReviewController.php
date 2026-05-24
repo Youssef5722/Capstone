@@ -36,4 +36,15 @@ class SubmissionReviewController extends Controller
             ->route('doctor.tasks.show', [$level, $workspace, $task])
             ->with('success', __('cms.submissions.rejected_success'));
     }
+
+    // Fix 8: file download for doctor
+    public function download(Request $request, Level $level, Workspace $workspace, Task $task, Submission $submission)
+    {
+        // Verify the submission belongs to this task
+        abort_unless($submission->submittable_id === $task->id &&
+                     $submission->submittable_type === \App\Models\Task::class, 404);
+
+        return \Illuminate\Support\Facades\Storage::disk('local')
+            ->download($submission->file_path, $submission->file_name);
+    }
 }

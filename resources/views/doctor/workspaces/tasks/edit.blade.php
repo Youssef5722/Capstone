@@ -9,9 +9,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.workspaces.show', [$level, $workspace]) }}">{{ $workspace->team->name ?? __('cms.teams.unnamed') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.tasks.show', [$level, $workspace, $task]) }}">{{ $task->title }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.tasks.edit_title') }}</span>
         </div>
         <h1>{{ __('cms.tasks.edit_title') }}</h1>

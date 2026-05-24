@@ -10,9 +10,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.workspaces.index', $level) }}">{{ __('cms.workspace.index_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ $workspace->team->name ?? __('cms.teams.unnamed') }}</span>
         </div>
         <h1>
@@ -75,6 +75,12 @@
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="tab-tasks" data-bs-toggle="tab" data-bs-target="#pane-tasks" type="button" role="tab">
             <i class="bi bi-check2-square me-1"></i>{{ __('cms.workspace.tab_tasks') }}
+        </button>
+    </li>
+    {{-- Fix 9: Files Archive tab --}}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-files" data-bs-toggle="tab" data-bs-target="#pane-files" type="button" role="tab">
+            <i class="bi bi-folder2-open me-1"></i>{{ __('cms.workspace.tab_files_archive') }}
         </button>
     </li>
 </ul>
@@ -237,6 +243,74 @@
                                                 </button>
                                             </form>
                                         </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- Fix 9: FILES ARCHIVE TAB --}}
+    <div class="tab-pane fade" id="pane-files" role="tabpanel">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h3><i class="bi bi-folder2-open me-2" style="color:#a78bfa;"></i>{{ __('cms.workspace.files_archive_title') }}</h3>
+            </div>
+            <div class="cms-card-body">
+                @php
+                    $allSubs = collect();
+                    foreach ($workspace->tasks as $t) {
+                        foreach ($t->submissions as $s) {
+                            $allSubs->push(['sub' => $s, 'context' => $t->title, 'type' => 'task', 'task' => $t]);
+                        }
+                        foreach ($t->subTasks as $st) {
+                            foreach ($st->submissions as $s) {
+                                $allSubs->push(['sub' => $s, 'context' => $st->title, 'type' => 'subtask', 'task' => $t]);
+                            }
+                        }
+                    }
+                @endphp
+                @if($allSubs->isEmpty())
+                    <p style="color:var(--cms-text-muted);">{{ __('cms.workspace.files_archive_empty') }}</p>
+                @else
+                    <div class="table-responsive">
+                        <table class="cms-table">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('cms.submissions.file_name') }}</th>
+                                    <th>{{ __('cms.submissions.submitted_by') }}</th>
+                                    <th>{{ __('cms.workspace.files_archive_task') }}</th>
+                                    <th>{{ __('cms.submissions.status') }}</th>
+                                    <th>{{ __('cms.submissions.submitted_at') }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($allSubs->sortByDesc(fn($i) => $i['sub']->created_at) as $item)
+                                @php
+                                    $sub = $item['sub'];
+                                    $subStatusStyle = match($sub->status) {
+                                        'approved'          => 'background:rgba(34,197,94,.15);color:#22c55e;',
+                                        'rejected'          => 'background:rgba(239,68,68,.15);color:#ef4444;',
+                                        'revision_required' => 'background:rgba(251,191,36,.15);color:#fbbf24;',
+                                        default             => 'background:rgba(255,255,255,.08);color:var(--cms-text-muted);',
+                                    };
+                                @endphp
+                                <tr>
+                                    <td class="fw-semibold">{{ $sub->file_name }}</td>
+                                    <td style="font-size:.85rem;">{{ $sub->submitter->name ?? '—' }}</td>
+                                    <td style="font-size:.85rem;color:var(--cms-text-muted);">{{ $item['context'] }}</td>
+                                    <td><span class="cms-badge" style="{{ $subStatusStyle }}">{{ __('cms.submissions.status_' . str_replace('revision_required','revision',$sub->status)) }}</span></td>
+                                    <td style="font-size:.8rem;color:var(--cms-text-muted);">{{ $sub->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>
+                                        <a href="{{ route('doctor.submissions.download', [$level, $workspace, $item['task'], $sub]) }}"
+                                           class="cms-btn cms-btn-secondary" style="padding:.25rem .6rem;font-size:.8rem;">
+                                            <i class="bi bi-download"></i> {{ __('cms.submissions.download_btn') }}
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach

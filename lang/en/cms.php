@@ -289,6 +289,25 @@ return [
         'status_activated'      => 'Activated',
         'status_pending'        => 'Pending',
         'confirm_delete'        => 'Are you sure you want to remove this student? This cannot be undone.',
+        // Fix 1
+        'activation_deadline'   => 'Activation Deadline',
+        'activation_deadline_hint' => 'Students will not be able to activate their account after this date.',
+        'name' => 'Student Name',
+    ],
+
+    // ── Students (plural, controller-level) ──────────────────────────────────
+    'students' => [
+        // Fix 4
+        'import_blocked_existing' => 'Import blocked: students already exist for this level and academic year. Use Bulk Delete first if you want to re-import.',
+        // Fix 6
+        'bulk_delete_btn'         => 'Delete All Students',
+        'bulk_delete_success'     => 'All students for this level and year have been permanently deleted.',
+        'bulk_delete_confirm_title' => 'Permanently Delete All Students?',
+        'bulk_delete_confirm_body'  => 'This action will permanently delete ALL students (including deleted ones) for this level and academic year. This CANNOT be undone. All teams and workspaces may be affected.',
+        'bulk_delete_confirm_btn'   => 'Yes, Delete All',
+        // Fix 11
+        'search_placeholder'      => 'Search by name...',
+        'transfer_cancel_btn' => 'Cancel Transfer',
     ],
 
     // ── General UI ───────────────────────────────────────────
@@ -305,6 +324,9 @@ return [
         'confirm_delete'=> 'Are you sure you want to delete this? This cannot be undone.',
         'loading'       => 'Loading...',
         'welcome_admin' => 'Welcome, System Administrator',
+        'created_at'  => 'Created At',
+        'back_home'   => 'Back to Home',
+        'pagination'  => 'Pagination Navigation',
     ],
 
     // ── Language switcher ────────────────────────────────────
@@ -445,6 +467,22 @@ return [
         'confirm_distribute'        => 'This will permanently create these teams and assign students. Continue?',
         'confirm_approve_request'   => 'Approve this request and apply the changes?',
         'confirm_reject_request'    => 'Reject this request?',
+        // Fix 2
+        'locked_by_workspace'       => 'This team has an active workspace. Membership changes are locked.',
+        // Fix 3
+        'distribute_activated_note' => 'Only activated students are eligible for distribution.',
+        // Fix 7
+        'adjust_invalid'            => 'Invalid move: student or group not found in current preview.',
+        'adjust_preview_success'    => 'Student moved successfully. Review the updated preview below.',
+        'adjust_move_btn'           => 'Move',
+        'adjust_to_group_label'     => 'Move to Group',
+        // Fix 10
+        'transfer_blocked_workspace'=> 'Cannot transfer student: source team has an active workspace.',
+        'transfer_confirm_title'    => 'Confirm Student Transfer',
+        'transfer_confirm_body'     => 'The following student(s) are already in another team. Confirm to transfer them to this team:',
+        'transfer_confirm_btn'      => 'Confirm Transfer',
+        'transfer_cancel_btn'       => 'Cancel',
+        'unassigned_students'       => 'Unassigned Activated Students',
     ],
 
     // ── Workspace (Sprint 4) ─────────────────────────────────────────────────
@@ -479,6 +517,12 @@ return [
         'approved_tasks'    => 'Approved Tasks',
         'pending_tasks'     => 'Pending Tasks',
         'total_tasks'       => 'Total Tasks',
+        // Fix 9
+        'tab_files_archive' => 'Files Archive',
+        'files_archive_title' => 'All Team Submissions',
+        'files_archive_empty' => 'No files have been submitted yet.',
+        'files_archive_task'  => 'Task',
+        'files_archive_subtask' => 'Sub-Task',
     ],
 
     // ── Phases (Sprint 4) ────────────────────────────────────────────────────
@@ -602,6 +646,8 @@ return [
         'review_submission'      => 'Review Submission',
         'reviewed_by'            => 'Reviewed By',
         'reviewed_at'            => 'Reviewed At',
+        // Fix 8
+        'download_btn'           => 'Download',
     ],
 
     // ── Comments (Sprint 4) ──────────────────────────────────────────────────
@@ -614,6 +660,29 @@ return [
         'posted_success'  => 'Comment posted successfully.',
         'by'              => 'by',
         'at'              => 'at',
+    ],
+    // ── UI Strings (Patch B) ─────────────────────────────────────────────────
+    'ui' => [
+        'year_placeholder'          => 'e.g. 2024/2025',
+        'doctor_name_placeholder'   => 'Dr. Jane Doe',
+        'doctor_email_placeholder'  => 'jane.doe.edu',
+        'national_id_placeholder'   => 'e.g. 29901011234567',
+        'idea_title_placeholder'    => 'e.g. Smart Campus Navigation System',
+        'idea_desc_placeholder'     => 'Describe the project idea, objectives, and expected outcomes...',
+        'status_pending'            => 'pending',
+        'expected_columns'          => 'Expected Excel columns:',
+        'col_name'                  => 'name',
+        'col_university_id'         => 'university_id',
+        'required'                  => '(required)',
+        'privacy_policy'            => 'Privacy Policy',
+        'terms_of_service'          => 'Terms of Service',
+        'university_guidelines'     => 'University Guidelines',
+        'home'                      => 'Home',
+        'dashboard'                 => 'Dashboard',
+        'sign_out'                  => 'Sign out',
+        'activation_code_placeholder' => 'e.g. STU-2024-XXXX.edu',
+        'email_placeholder'         => 'name.edu',
+        'leader'                    => 'Leader',
     ],
 
 ];

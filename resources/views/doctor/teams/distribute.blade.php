@@ -9,9 +9,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.teams.index', $level) }}">{{ __('cms.teams.index_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.teams.distribute_title') }}</span>
         </div>
         <h1>{{ __('cms.teams.distribute_title') }}</h1>
@@ -30,6 +30,18 @@
                 <div>
                     <div style="font-size:2.5rem; font-weight:800; color:var(--text-primary); line-height: 1;">{{ $unassignedCount }}</div>
                     <div style="color:var(--text-muted); margin-top: 0.5rem; font-weight: 500;">{{ __('cms.teams.unassigned_students') }}</div>
+                </div>
+                {{-- Fix 3: Show activated vs total breakdown --}}
+                <div class="mt-3 pt-3" style="border-top:1px solid rgba(167,139,250,.2);">
+                    <div style="font-size:.8rem;color:var(--text-faint);">
+                        <i class="bi bi-check-circle-fill me-1" style="color:#22c55e;"></i>
+                        <strong style="color:#22c55e;">{{ $activatedStudents }}</strong> {{ __('cms.student.filter_activated') }}
+                        &nbsp;/&nbsp;
+                        <strong style="color:var(--text-muted);">{{ $totalStudents }}</strong> {{ __('cms.student.filter_all') }}
+                    </div>
+                    <div style="font-size:.75rem;color:var(--text-faint);margin-top:.3rem;">
+                        <i class="bi bi-info-circle me-1"></i>{{ __('cms.teams.distribute_activated_note') }}
+                    </div>
                 </div>
             </div>
             <div class="card-bg-shape" style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, rgba(122, 34, 253, 0.1) 0%, transparent 70%); pointer-events: none;"></div>
@@ -118,7 +130,7 @@
                             <i class="bi bi-eye"></i> {{ __('cms.teams.preview_btn') }}
                         </button>
                         <a href="{{ route('doctor.teams.index', $level) }}" class="cms-btn cms-btn-ghost" style="padding: 0.75rem 2rem; font-weight: 600;">
-                            <i class="bi bi-arrow-left"></i> {{ __('cms.general.cancel') }}
+                            <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.general.cancel') }}
                         </a>
                     </div>
                 </form>

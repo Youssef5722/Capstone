@@ -31,7 +31,7 @@
                         <label class="cms-form-label" for="name">{{ __('cms.academic_years.name') }}</label>
                         <input type="text" class="cms-form-control @error('name') is-invalid @enderror"
                                id="name" name="name" value="{{ old('name') }}"
-                               placeholder="e.g. 2024/2025" required>
+                               placeholder="{{ __('cms.ui.year_placeholder') }}" required>
                         <div class="cms-invalid-feedback">{{ $errors->first('name') }}</div>
                     </div>
 

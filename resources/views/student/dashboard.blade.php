@@ -30,7 +30,7 @@
     content: '';
     position: absolute;
     top: -100px;
-    right: -100px;
+    inset-inline-end: -100px;
     width: 300px;
     height: 300px;
     border-radius: 50%;
@@ -42,7 +42,7 @@
     content: '';
     position: absolute;
     bottom: -80px;
-    left: 20%;
+    inset-inline-start: 20%;
     width: 250px;
     height: 250px;
     border-radius: 50%;
@@ -175,8 +175,8 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     height: 3px;
     opacity: 0;
     transition: opacity 0.3s;
@@ -288,7 +288,7 @@
         </span>
         <div class="cms-breadcrumb" style="justify-content: flex-end;">
             <i class="bi bi-house-fill"></i>
-            <i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:0.6rem;"></i>
             <span>{{ __('cms.student.dashboard_title') }}</span>
         </div>
     </div>
@@ -343,7 +343,7 @@
                     </div>
                     <div class="stu-action-btn">
                         <span class="cms-btn cms-btn-secondary w-100 justify-content-center">
-                            {{ __('cms.teams.my_team_title') }} <i class="bi bi-arrow-right ms-2"></i>
+                            {{ __('cms.teams.my_team_title') }} <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-2"></i>
                         </span>
                     </div>
                 </a>
@@ -361,7 +361,7 @@
                     </div>
                     <div class="stu-action-btn">
                         <span class="cms-btn cms-btn-primary w-100 justify-content-center">
-                            {{ __('cms.workspace.view_workspace') }} <i class="bi bi-arrow-right ms-2"></i>
+                            {{ __('cms.workspace.view_workspace') }} <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-2"></i>
                         </span>
                     </div>
                 </a>

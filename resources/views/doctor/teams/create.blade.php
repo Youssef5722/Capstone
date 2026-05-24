@@ -10,9 +10,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.teams.index', $level) }}">{{ __('cms.teams.index_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.teams.create_title') }}</span>
         </div>
         <h1>{{ __('cms.teams.create_title') }}</h1>
@@ -83,9 +83,15 @@
                 @if($students->isEmpty())
                     <p style="color:var(--text-muted);">{{ __('cms.teams.no_unassigned_students') }}</p>
                 @else
+                    {{-- Fix 12: search input --}}
+                    <div class="mb-2 position-relative">
+                        <i class="bi bi-search" style="position:absolute;top:50%;inset-inline-start:.75rem;transform:translateY(-50%);color:var(--text-faint);"></i>
+                        <input type="text" id="member-search-create" class="form-control form-control-sm ps-4"
+                               placeholder="{{ __('cms.students.search_placeholder') }}" autocomplete="off">
+                    </div>
                     <div style="max-height:300px; overflow-y:auto; border:1px solid var(--cms-border); border-radius:12px; padding:1rem; background: rgba(0,0,0,0.02);" class="custom-scroll">
                         @foreach($students as $student)
-                            <div class="form-check custom-checkbox mb-3">
+                            <div class="form-check custom-checkbox mb-3 member-item-create" data-name="{{ $student->name }}">
                                 <input class="form-check-input" type="checkbox"
                                        name="student_ids[]" value="{{ $student->id }}"
                                        id="stu_{{ $student->id }}"
@@ -109,7 +115,7 @@
                     <i class="bi bi-check-lg"></i> {{ __('cms.general.save') }}
                 </button>
                 <a href="{{ route('doctor.teams.index', $level) }}" class="cms-btn cms-btn-ghost" style="padding: 0.75rem 2rem; font-weight: 600;">
-                    <i class="bi bi-arrow-left"></i> {{ __('cms.general.cancel') }}
+                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.general.cancel') }}
                 </a>
             </div>
         </form>
@@ -143,6 +149,59 @@
     transform: scale(1.1);
 }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+// Fix 12: leader dropdown → auto-check & lock the corresponding member checkbox
+(function () {
+    const leaderSelect   = document.getElementById('leader_id');
+    const memberBoxes    = document.querySelectorAll('input[name="student_ids[]"]');
+    const memberSearch   = document.getElementById('member-search-create');
+
+    // Advanced Arabic Normalization (Handles presentation forms like ﯾ -> ي and Alef variations)
+    function normalizeArabic(text) {
+        if (!text) return '';
+        return text.normalize('NFKC').toLowerCase().trim()
+            .replace(/[أإآ]/g, 'ا')
+            .replace(/ة/g, 'ه')
+            .replace(/ى/g, 'ي')
+            .replace(/ؤ/g, 'و')
+            .replace(/ئ/g, 'ي');
+    }
+
+    function applyLeaderLock() {
+        const leaderId = leaderSelect ? leaderSelect.value : null;
+        memberBoxes.forEach(cb => {
+            if (cb.value === leaderId) {
+                cb.checked  = true;
+                cb.disabled = true;
+                cb.closest('.form-check').title = '{{ __("cms.teams.leader") }}';
+            } else {
+                cb.disabled = false;
+            }
+        });
+    }
+
+    if (leaderSelect) {
+        leaderSelect.addEventListener('change', applyLeaderLock);
+        applyLeaderLock(); // run on page load for old() value
+    }
+
+    // Live search filter for members list
+    if (memberSearch) {
+        memberSearch.addEventListener('input', function () {
+            const q = normalizeArabic(this.value);
+            const terms = q.split(/\s+/);
+            document.querySelectorAll('.member-item-create').forEach(item => {
+                const name = normalizeArabic(item.dataset.name);
+                const matches = terms.every(t => name.includes(t));
+                item.style.display = matches ? '' : 'none';
+            });
+        });
+    }
+})();
+</script>
 @endpush
 
 @endsection

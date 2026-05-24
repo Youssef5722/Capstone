@@ -9,9 +9,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.teams.index', $level) }}">{{ __('cms.teams.index_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.teams.edit_title') }}</span>
         </div>
         <h1>{{ __('cms.teams.edit_title') }}: {{ $team->name ?? __('cms.teams.unnamed') }}</h1>
@@ -128,9 +128,16 @@
             <input type="hidden" name="name" value="{{ $team->name }}">
             <input type="hidden" name="leader_id" value="{{ $team->leader_id }}">
 
+            {{-- Fix 13: search box --}}
+            <div class="mb-2 position-relative">
+                <i class="bi bi-search" style="position:absolute;top:50%;inset-inline-start:.75rem;transform:translateY(-50%);color:var(--text-faint);"></i>
+                <input type="text" id="edit-member-search" class="form-control form-control-sm ps-4"
+                       placeholder="{{ __('cms.students.search_placeholder') }}" autocomplete="off">
+            </div>
+
             <div style="max-height:200px;overflow-y:auto;border:1px solid var(--cms-border);border-radius:.5rem;padding:.75rem;background:var(--cms-bg-card);" class="mb-3">
                 @foreach($available as $student)
-                    <div class="form-check mb-2">
+                    <div class="form-check mb-2 edit-member-item" data-name="{{ $student->name }}">
                         <input class="form-check-input" type="checkbox"
                                name="add_student_ids[]" value="{{ $student->id }}"
                                id="add_{{ $student->id }}">
@@ -148,5 +155,85 @@
     </div>
 </div>
 @endif
+
+{{-- Fix 10: Transfer Confirmation Modal (triggered by session 'transfer_confirm') --}}
+@if(session('transfer_confirm'))
+@php $tc = session('transfer_confirm'); @endphp
+<div class="modal fade show" id="transferModal" tabindex="-1" style="display:block;background:rgba(0,0,0,.6);" aria-modal="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:1rem;">
+            <div class="modal-header" style="border-bottom:1px solid var(--cms-border);">
+                <h5 class="modal-title" style="color:#fbbf24;">
+                    <i class="bi bi-arrow-left-right me-2"></i>{{ __('cms.teams.transfer_confirm_title') }}
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--cms-text-muted);">{{ __('cms.teams.transfer_confirm_body') }}</p>
+                <ul class="list-unstyled mb-0">
+                    @foreach($tc['students'] as $item)
+                    <li class="d-flex align-items-center gap-2 py-1">
+                        <div class="user-avatar" style="width:26px;height:26px;font-size:.65rem;">
+                            {{ strtoupper(substr($item['student']->name, 0, 1)) }}
+                        </div>
+                        <div>
+                            <span class="fw-semibold">{{ $item['student']->name }}</span>
+                            <span style="font-size:.8rem;color:var(--cms-text-muted);"> &larr; {{ $item['from_team']->name ?? __('cms.teams.unnamed') }}</span>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid var(--cms-border);">
+                <a href="{{ route('doctor.teams.edit', [$level, $team]) }}" class="cms-btn cms-btn-secondary">
+                    {{ __('cms.teams.transfer_cancel_btn') }}
+                </a>
+                <form method="POST" action="{{ route('doctor.teams.update', [$level, $team]) }}">
+                    @csrf
+                    <input type="hidden" name="name" value="{{ $team->name }}">
+                    <input type="hidden" name="leader_id" value="{{ $team->leader_id }}">
+                    <input type="hidden" name="confirm_transfer" value="1">
+                    @foreach($tc['add_student_ids'] as $sid)
+                        <input type="hidden" name="add_student_ids[]" value="{{ $sid }}">
+                    @endforeach
+                    <button type="submit" class="cms-btn cms-btn-primary">
+                        <i class="bi bi-arrow-left-right me-1"></i>{{ __('cms.teams.transfer_confirm_btn') }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+@push('scripts')
+<script>
+// Fix 13: live search for add-members checkbox list
+(function () {
+    const input = document.getElementById('edit-member-search');
+    if (!input) return;
+
+    // Advanced Arabic Normalization
+    function normalizeArabic(text) {
+        if (!text) return '';
+        return text.normalize('NFKC').toLowerCase().trim()
+            .replace(/[أإآ]/g, 'ا')
+            .replace(/ة/g, 'ه')
+            .replace(/ى/g, 'ي')
+            .replace(/ؤ/g, 'و')
+            .replace(/ئ/g, 'ي');
+    }
+
+    input.addEventListener('input', function () {
+        const q = normalizeArabic(this.value);
+        const terms = q.split(/\s+/);
+        document.querySelectorAll('.edit-member-item').forEach(item => {
+            const name = normalizeArabic(item.dataset.name);
+            const matches = terms.every(t => name.includes(t));
+            item.style.display = matches ? '' : 'none';
+        });
+    });
+})();
+</script>
+@endpush
 
 @endsection

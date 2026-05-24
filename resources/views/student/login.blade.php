@@ -56,7 +56,7 @@
                             <div class="input-icon-wrapper">
                                 <i class="bi bi-person-badge prefix-icon"></i>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="university_id"
-                                       placeholder="e.g. STU-2024-XXXX@university.edu" value="{{ old('email') }}" required>
+                                       placeholder="{{ __('cms.ui.activation_code_placeholder') }}" value="{{ old('email') }}" required>
                             </div>
                             @error('email')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -84,7 +84,7 @@
                         </div>
 
                         <button type="submit" class="btn-primary-student">
-                            {{ __('cms.auth.sign_in_btn') }} <i class="bi bi-arrow-right ms-2"></i>
+                            {{ __('cms.auth.sign_in_btn') }} <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-2"></i>
                         </button>
                     </form>
 
@@ -109,7 +109,7 @@
                                 <div class="input-icon-wrapper">
                                     <i class="bi bi-envelope prefix-icon"></i>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="actEmail"
-                                           placeholder="name@university.edu" value="{{ old('email') }}" required>
+                                           placeholder="{{ __('cms.ui.email_placeholder') }}" value="{{ old('email') }}" required>
                                 </div>
                                 @error('email')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -159,7 +159,7 @@
                                 <div class="input-icon-wrapper">
                                     <i class="bi bi-key prefix-icon"></i>
                                     <input type="text" class="form-control @error('activation_code') is-invalid @enderror" name="activation_code" id="actCode"
-                                           placeholder="{{ __('cms.auth.activation_code_placeholder') }}" value="{{ old('activation_code') }}" required>
+                                           placeholder="{{ __('cms.ui.activation_code_placeholder') }}" value="{{ old('activation_code') }}" required>
                                 </div>
                                 @error('activation_code')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>

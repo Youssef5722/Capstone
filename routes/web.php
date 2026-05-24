@@ -110,6 +110,8 @@ Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level'])
         Route::get('/students/import',       [StudentController::class, 'showImport'])->name('students.import');
         Route::post('/students/import',      [StudentController::class, 'import'])    ->name('students.import.store');
         Route::get('/students/export',       [StudentController::class, 'export'])    ->name('students.export');
+        // Fix 6: bulk permanent delete MUST be before {student} wildcard
+        Route::delete('/students/bulk-destroy', [StudentController::class, 'bulkDestroy'])->name('students.bulk_destroy');
         Route::delete('/students/{student}', [StudentController::class, 'destroy'])   ->name('students.destroy');
         Route::post('/students/{student}/restore', [StudentController::class, 'restore'])->name('students.restore');
 
@@ -150,6 +152,9 @@ Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level'])
         Route::get('/requests',                         [TeamRequestController::class, 'index'])  ->name('requests.index');
         Route::post('/requests/{teamRequest}/approve',  [TeamRequestController::class, 'approve'])->name('requests.approve');
         Route::post('/requests/{teamRequest}/reject',   [TeamRequestController::class, 'reject']) ->name('requests.reject');
+
+        // Fix 7: editable distribution preview
+        Route::post('/teams/distribute/adjust', [TeamDistributionController::class, 'adjustPreview'])->name('teams.distribute.adjust');
     });
 
 // ─── Sprint 3: Student Team Routes ────────────────────────────────────────────
@@ -204,6 +209,9 @@ Route::middleware(['auth', 'role:doctor', 'active.year', 'doctor.level', 'can.ac
             [SubmissionReviewController::class, 'approve'])->name('submissions.approve');
         Route::post('/tasks/{task}/submissions/{submission}/reject',
             [SubmissionReviewController::class, 'reject'])->name('submissions.reject');
+        // Fix 8: doctor file download
+        Route::get('/tasks/{task}/submissions/{submission}/download',
+            [SubmissionReviewController::class, 'download'])->name('submissions.download');
 
         // ── Comments (Doctor) ─────────────────────────────────────────────────
         Route::post('/tasks/{task}/comments',
@@ -241,6 +249,8 @@ Route::middleware(['auth:student', 'student.year.active', 'active.year', 'in.tea
 
         // ── File Submissions (polymorphic) ────────────────────────────────────
         Route::post('/submit', [SubmissionController::class, 'store'])->name('submit');
+        // Fix 8: student file download
+        Route::get('/submissions/{submission}/download', [SubmissionController::class, 'download'])->name('submissions.download');
 
         // ── Sub-Task Review (leader only) ─────────────────────────────────────
         Route::post('/tasks/{task}/subtasks/{subTask}/submissions/{submission}/approve',

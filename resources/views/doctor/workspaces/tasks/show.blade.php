@@ -24,7 +24,7 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.workspaces.show', [$level, $workspace]) }}">{{ $workspace->team->name ?? __('cms.teams.unnamed') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.tasks.show_title') }}</span>
         </div>
         <h1>{{ $task->title }}</h1>
@@ -44,7 +44,7 @@
     </div>
     <div class="d-flex gap-2 align-self-start flex-wrap">
         <a href="{{ route('doctor.workspaces.show', [$level, $workspace]) }}" class="cms-btn cms-btn-secondary">
-            <i class="bi bi-arrow-left"></i> {{ __('cms.workspace.back_to_index') }}
+            <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.workspace.back_to_index') }}
         </a>
     </div>
 </div>
@@ -132,7 +132,14 @@
                                     · {{ $sub->created_at->format('Y-m-d H:i') }}
                                 </div>
                             </div>
-                            <span class="cms-badge" style="{{ $subStatusStyle }}">{{ __('cms.submissions.status_' . str_replace('revision_required','revision',$sub->status)) }}</span>
+                            <div class="d-flex gap-2 align-items-center">
+                                <span class="cms-badge" style="{{ $subStatusStyle }}">{{ __('cms.submissions.status_' . str_replace('revision_required','revision',$sub->status)) }}</span>
+                                {{-- Fix 8: Download button --}}
+                                <a href="{{ route('doctor.submissions.download', [$level, $workspace, $task, $sub]) }}"
+                                   class="cms-btn cms-btn-secondary" style="padding:.25rem .6rem;font-size:.8rem;">
+                                    <i class="bi bi-download"></i> {{ __('cms.submissions.download_btn') }}
+                                </a>
+                            </div>
                         </div>
 
                         @if($sub->rejection_reason)

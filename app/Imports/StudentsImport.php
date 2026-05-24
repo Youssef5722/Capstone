@@ -11,6 +11,7 @@ class StudentsImport
     public function __construct(
         private readonly int $levelId,
         private readonly int $academicYearId,
+        private readonly ?string $activationDeadline = null, // Fix 1: set by doctor at import time
     ) {}
 
     /**
@@ -67,15 +68,16 @@ class StudentsImport
             // PREP-2: created_at/updated_at set manually — insert() bypasses
             // Eloquent model timestamps.
             $batch[] = [
-                'name'             => $name,
-                'university_id'    => $universityId,
+                'name'                      => $name,
+                'university_id'             => $universityId,
                 // email is null — student will set it at account activation
-                'activation_code'  => $code,
-                'is_active'        => false,
-                'level_id'         => $this->levelId,
-                'academic_year_id' => $this->academicYearId,
-                'created_at'       => now(),
-                'updated_at'       => now(),
+                'activation_code'           => $code,
+                'activation_code_expires_at'=> $this->activationDeadline, // Fix 1
+                'is_active'                 => false,
+                'level_id'                  => $this->levelId,
+                'academic_year_id'          => $this->academicYearId,
+                'created_at'                => now(),
+                'updated_at'                => now(),
             ];
         }
 

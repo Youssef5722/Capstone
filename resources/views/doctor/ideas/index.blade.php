@@ -11,9 +11,9 @@
             <a href="{{ route('doctor.dashboard') }}" style="color:inherit;text-decoration:none;">
                 <i class="bi bi-house-fill"></i>
             </a>
-            <i class="bi bi-chevron-right" style="font-size:.7rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:.7rem;"></i>
             <span>{{ __('cms.doctor.level_context', ['name' => $level->name]) }}</span>
-            <i class="bi bi-chevron-right" style="font-size:.7rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:.7rem;"></i>
             <span>{{ __('cms.doctor.ideas_title') }}</span>
         </div>
         <h1>{{ __('cms.doctor.ideas_title') }}</h1>

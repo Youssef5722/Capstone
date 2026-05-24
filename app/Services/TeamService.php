@@ -45,6 +45,13 @@ class TeamService
      */
     public function addStudents(Team $team, array $studentIds): void
     {
+        // Fix 2: workspace locks team membership
+        if ($team->workspace()->exists()) {
+            throw ValidationException::withMessages([
+                'student_ids' => [__('cms.teams.locked_by_workspace')],
+            ]);
+        }
+
         DB::transaction(function () use ($team, $studentIds) {
             foreach ($studentIds as $studentId) {
                 $student = Student::where('id', $studentId)
@@ -82,6 +89,13 @@ class TeamService
      */
     public function removeStudent(Team $team, Student $student): void
     {
+        // Fix 2: workspace locks team membership
+        if ($team->workspace()->exists()) {
+            throw ValidationException::withMessages([
+                'student_ids' => [__('cms.teams.locked_by_workspace')],
+            ]);
+        }
+
         if ($student->id === $team->leader_id) {
             abort(422, __('cms.teams.cannot_remove_leader'));
         }
@@ -114,6 +128,27 @@ class TeamService
     {
         DB::transaction(function () use ($team) {
             $team->delete();
+        });
+    }
+
+    /**
+     * Transfer a student from one team to another in the same year.
+     * Fix 10: guard against workspace lock on source team.
+     */
+    public function transferStudent(Student $student, Team $fromTeam, Team $toTeam): void
+    {
+        // Cannot transfer if source team has a workspace
+        if ($fromTeam->workspace()->exists()) {
+            throw ValidationException::withMessages([
+                'student_ids' => [__('cms.teams.transfer_blocked_workspace')],
+            ]);
+        }
+
+        DB::transaction(function () use ($student, $fromTeam, $toTeam) {
+            $fromTeam->students()->detach($student->id);
+            $toTeam->students()->attach($student->id, [
+                'academic_year_id' => $toTeam->academic_year_id,
+            ]);
         });
     }
 }

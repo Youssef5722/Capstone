@@ -103,7 +103,64 @@ class TeamController extends Controller
 
         // Add newly selected members (student_ids from the add-members sub-form)
         if ($request->filled('add_student_ids')) {
-            $this->service->addStudents($team, $request->input('add_student_ids'));
+            $addIds = $request->input('add_student_ids');
+
+            // Fix 10: detect students already in another team
+            if ($request->boolean('confirm_transfer')) {
+                // Doctor confirmed — transfer each student from their current team
+                foreach ($addIds as $studentId) {
+                    $student = Student::where('id', $studentId)
+                                      ->where('level_id', $level->id)
+                                      ->where('academic_year_id', $activeYear->id)
+                                      ->firstOrFail();
+
+                    $currentTeam = $student->teams()
+                        ->where('team_student.academic_year_id', $activeYear->id)
+                        ->first();
+
+                    if ($currentTeam && $currentTeam->id !== $team->id) {
+                        $this->service->transferStudent($student, $currentTeam, $team);
+                    } elseif (!$currentTeam) {
+                        $this->service->addStudents($team, [$studentId]);
+                    }
+                    // if already in this team, skip
+                }
+            } else {
+                // Check if any selected student is already in a different team
+                $transfers = [];
+                $fresh = [];
+
+                foreach ($addIds as $studentId) {
+                    $student = Student::find($studentId);
+                    if (!$student) continue;
+
+                    $currentTeam = $student->teams()
+                        ->where('team_student.academic_year_id', $activeYear->id)
+                        ->first();
+
+                    if ($currentTeam && $currentTeam->id !== $team->id) {
+                        $transfers[] = ['student' => $student, 'from_team' => $currentTeam];
+                    } else {
+                        $fresh[] = $studentId;
+                    }
+                }
+
+                // Add students not in any team normally
+                if (!empty($fresh)) {
+                    $this->service->addStudents($team, $fresh);
+                }
+
+                // If transfers needed — flash session and redirect to show modal
+                if (!empty($transfers)) {
+                    return redirect()
+                        ->route('doctor.teams.edit', [$level, $team])
+                        ->with('success', empty($fresh) ? null : __('cms.teams.updated_success'))
+                        ->with('transfer_confirm', [
+                            'students'       => $transfers,
+                            'add_student_ids'=> $addIds,
+                        ]);
+                }
+            }
         }
 
         return redirect()

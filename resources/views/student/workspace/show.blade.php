@@ -10,7 +10,7 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('student.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.workspace.show_title') }}</span>
         </div>
         <h1>
@@ -81,6 +81,12 @@
             <i class="bi bi-layers me-1"></i>{{ __('cms.workspace.tab_phases') }}
         </button>
     </li>
+    {{-- Fix 9: Files Archive tab --}}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-files-archive" type="button">
+            <i class="bi bi-folder2-open me-1"></i>{{ __('cms.workspace.tab_files_archive') }}
+        </button>
+    </li>
 </ul>
 
 <div class="tab-content">
@@ -129,7 +135,7 @@
                                 </div>
                                 <div class="mt-auto">
                                     <a href="{{ route('student.workspace.tasks.show', $task->id) }}" class="cms-btn cms-btn-primary w-100 justify-content-center" style="font-size:.85rem;">
-                                        {{ __('cms.general.actions') }} <i class="bi bi-arrow-right ms-1"></i>
+                                        {{ __('cms.general.actions') }} <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-1"></i>
                                     </a>
                                 </div>
                             </div>
@@ -178,7 +184,7 @@
                                 <span class="cms-badge" style="{{ $subStatusBadge }}">{{ __('cms.tasks.status_' . $subTask->status) }}</span>
                                 <a href="{{ route('student.workspace.subtasks.show', [$subTask->task_id, $subTask->id]) }}"
                                    class="cms-btn cms-btn-secondary" style="padding:.3rem .65rem;font-size:.8rem;">
-                                    <i class="bi bi-arrow-right"></i>
+                                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
                                 </a>
                             </div>
                         </div>
@@ -219,8 +225,64 @@
                                 </span>
                             </div>
                             <div style="font-size:.8rem;color:var(--cms-text-muted);margin-top:.4rem;">
-                                {{ $phase->start_date->format('Y-m-d') }} → {{ $phase->end_date->format('Y-m-d') }}
+                                {{ $phase->start_date->format('Y-m-d') }} — {{ $phase->end_date->format('Y-m-d') }}
                                 · {{ $phase->tasks->count() }} {{ __('cms.phases.tasks_count') }}
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- Fix 9: ALL Team Files Archive --}}
+    <div class="tab-pane fade" id="pane-files-archive">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h3><i class="bi bi-folder2-open me-2" style="color:#0AFFFF;"></i>{{ __('cms.workspace.files_archive_title') }}</h3>
+            </div>
+            <div class="cms-card-body">
+                @php
+                    $allSubs = collect();
+                    foreach ($workspace->tasks as $t) {
+                        foreach ($t->submissions as $s) {
+                            $allSubs->push(['sub' => $s, 'context' => $t->title]);
+                        }
+                        foreach ($t->subTasks as $st) {
+                            foreach ($st->submissions as $s) {
+                                $allSubs->push(['sub' => $s, 'context' => $st->title]);
+                            }
+                        }
+                    }
+                @endphp
+                @if($allSubs->isEmpty())
+                    <p style="color:var(--cms-text-muted);">{{ __('cms.workspace.files_archive_empty') }}</p>
+                @else
+                    <div class="d-flex flex-column gap-2">
+                        @foreach($allSubs->sortByDesc(fn($i) => $i['sub']->created_at) as $item)
+                        @php
+                            $sub = $item['sub'];
+                            $subBadge = match($sub->status) {
+                                'approved'          => 'background:rgba(34,197,94,.15);color:#22c55e;',
+                                'rejected'          => 'background:rgba(239,68,68,.15);color:#ef4444;',
+                                'revision_required' => 'background:rgba(251,191,36,.15);color:#fbbf24;',
+                                default             => 'background:rgba(255,255,255,.08);color:var(--cms-text-muted);',
+                            };
+                        @endphp
+                        <div style="padding:.75rem 1rem;border:1px solid var(--cms-border);border-radius:.5rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                            <div>
+                                <div class="fw-semibold" style="font-size:.9rem;">{{ $sub->file_name }}</div>
+                                <div style="font-size:.78rem;color:var(--cms-text-muted);">
+                                    {{ $sub->submitter->name ?? '—' }} · {{ $item['context'] }} · {{ $sub->created_at->format('Y-m-d') }}
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="cms-badge" style="{{ $subBadge }}">{{ __('cms.submissions.status_' . str_replace('revision_required','revision',$sub->status)) }}</span>
+                                <a href="{{ route('student.workspace.submissions.download', $sub->id) }}"
+                                   class="cms-btn cms-btn-secondary" style="padding:.25rem .6rem;font-size:.8rem;">
+                                    <i class="bi bi-download"></i> {{ __('cms.submissions.download_btn') }}
+                                </a>
                             </div>
                         </div>
                         @endforeach

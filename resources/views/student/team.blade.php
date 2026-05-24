@@ -10,7 +10,7 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('student.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.teams.my_team_title') }}</span>
         </div>
         <h1>{{ __('cms.teams.my_team_title') }}</h1>
@@ -88,7 +88,7 @@
                                         </div>
                                     </div>
                                     @if($member->id === $team->leader_id)
-                                        <i class="bi bi-star-fill me-2" style="color:#0AFFFF; font-size:.85rem;" title="Leader"></i>
+                                        <i class="bi bi-star-fill me-2" style="color:#0AFFFF; font-size:.85rem;" title="{{ __('cms.ui.leader') }}"></i>
                                     @endif
                                 </div>
                             </div>

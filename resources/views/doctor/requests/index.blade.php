@@ -9,9 +9,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ $level->name }}</span>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.teams.requests_title') }}</span>
         </div>
         <h1>{{ __('cms.teams.requests_title') }}</h1>
@@ -26,7 +26,7 @@
             {{ __('cms.teams.requests_title') }}
             @php $pendingCount = $requests->where('status','pending')->count(); @endphp
             @if($pendingCount > 0)
-                <span class="cms-badge cms-badge-warning ms-2">{{ $pendingCount }} pending</span>
+                <span class="cms-badge cms-badge-warning ms-2">{{ $pendingCount }} {{ __('cms.ui.status_pending') }}</span>
             @endif
         </h3>
     </div>

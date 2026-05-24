@@ -27,17 +27,17 @@
     <a href="{{ url('/') }}" class="auth-brand">CMS</a>
 
     <div class="auth-nav-links">
-        <a href="{{ url('/') }}">Home</a>
+        <a href="{{ url('/') }}">{{ __('cms.ui.home') }}</a>
 
         @if($webUser)
             <a href="{{ $webUser->role?->name === 'admin' ? route('admin.dashboard') : route('doctor.dashboard') }}">
-                Dashboard
+                {{ __('cms.ui.dashboard') }}
             </a>
         @elseif($studentUser)
-            <a href="{{ route('student.dashboard') }}">Dashboard</a>
+            <a href="{{ route('student.dashboard') }}">{{ __('cms.ui.dashboard') }}</a>
         @else
             {{-- Guest: Dashboard link goes nowhere useful, keep decorative --}}
-            <a href="{{ url('/') }}">Dashboard</a>
+            <a href="{{ url('/') }}">{{ __('cms.ui.dashboard') }}</a>
         @endif
     </div>
 
@@ -68,7 +68,7 @@
             </span>
             <form action="{{ $logoutRoute }}" method="POST" class="d-inline">
                 @csrf
-                <button type="submit" class="icon-btn" title="Sign out"
+                <button type="submit" class="icon-btn" title="{{ __('cms.ui.sign_out') }}"
                         style="background:none;border:none;cursor:pointer;padding:0;">
                     <i class="bi bi-box-arrow-right" style="color:#a78bfa;font-size:1.1rem;"></i>
                 </button>
@@ -85,9 +85,9 @@
 <footer class="bottom-footer">
     <div class="footer-brand">CMS</div>
     <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">University Guidelines</a>
+        <a href="#">{{ __('cms.ui.privacy_policy') }}</a>
+        <a href="#">{{ __('cms.ui.terms_of_service') }}</a>
+        <a href="#">{{ __('cms.ui.university_guidelines') }}</a>
     </div>
     <div class="footer-copy">&copy; {{ date('Y') }} Academic Management System. All rights reserved.</div>
 </footer>

@@ -29,7 +29,7 @@
     content: '';
     position: absolute;
     top: -80px;
-    right: -80px;
+    inset-inline-end: -80px;
     width: 280px;
     height: 280px;
     border-radius: 50%;
@@ -41,7 +41,7 @@
     content: '';
     position: absolute;
     bottom: -60px;
-    left: 30%;
+    inset-inline-start: 30%;
     width: 200px;
     height: 200px;
     border-radius: 50%;
@@ -122,8 +122,8 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     height: 2px;
     opacity: 0;
     transition: opacity 0.3s;
@@ -233,7 +233,7 @@
     content: '';
     position: absolute;
     top: -30px;
-    right: -30px;
+    inset-inline-end: -30px;
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -539,7 +539,7 @@
 
         <div class="cms-breadcrumb" style="justify-content: flex-end;">
             <i class="bi bi-house-fill"></i>
-            <i class="bi bi-chevron-right" style="font-size:0.6rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:0.6rem;"></i>
             <span>{{ __('cms.doctor.dashboard_title') }}</span>
         </div>
     </div>
@@ -678,7 +678,7 @@
                                    class="cms-btn cms-btn-primary w-100 justify-content-center">
                                     <i class="bi bi-people-fill"></i>
                                     {{ __('cms.doctor.manage_level') ?? 'Manage Students' }}
-                                    <i class="bi bi-arrow-right ms-auto"></i>
+                                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-auto"></i>
                                 </a>
                                 <a href="{{ route('doctor.workspaces.index', $assignment->level->id) }}"
                                    class="cms-btn cms-btn-ghost w-100 justify-content-center"
@@ -718,7 +718,7 @@
             <div class="qa-label">{{ __('cms.doctor.qa_ideas') ?? 'Project Ideas' }}</div>
             <div class="qa-sub">{{ __('cms.doctor.qa_ideas_sub') ?? 'Browse & manage ideas' }}</div>
         </div>
-        <i class="bi bi-chevron-right doc-qa-arrow"></i>
+        <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} doc-qa-arrow"></i>
     </a>
 
     <a href="{{ route('doctor.teams.index', $firstLevel->id) }}" class="doc-qa-card cyan">
@@ -729,7 +729,7 @@
             <div class="qa-label">{{ __('cms.teams.index_title') }}</div>
             <div class="qa-sub">{{ __('cms.doctor.qa_teams_sub') ?? 'View & manage teams' }}</div>
         </div>
-        <i class="bi bi-chevron-right doc-qa-arrow"></i>
+        <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} doc-qa-arrow"></i>
     </a>
 
     <a href="{{ route('doctor.requests.index', $firstLevel->id) }}" class="doc-qa-card amber">
@@ -740,7 +740,7 @@
             <div class="qa-label">{{ __('cms.teams.requests_title') }}</div>
             <div class="qa-sub">{{ __('cms.doctor.qa_requests_sub') ?? 'Review pending requests' }}</div>
         </div>
-        <i class="bi bi-chevron-right doc-qa-arrow"></i>
+        <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} doc-qa-arrow"></i>
     </a>
 
     <a href="{{ route('doctor.workspaces.index', $firstLevel->id) }}" class="doc-qa-card green">
@@ -751,7 +751,7 @@
             <div class="qa-label">{{ __('cms.workspace.nav') }}</div>
             <div class="qa-sub">{{ __('cms.doctor.qa_workspace_sub') ?? 'Workspaces & phases' }}</div>
         </div>
-        <i class="bi bi-chevron-right doc-qa-arrow"></i>
+        <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} doc-qa-arrow"></i>
     </a>
 </div>
 @endif

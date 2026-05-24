@@ -14,8 +14,11 @@ class UpdateTeamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => ['nullable', 'string', 'max:255'],
-            'leader_id' => ['required', 'exists:students,id'],
+            'name'              => ['nullable', 'string', 'max:255'],
+            'leader_id'         => ['required', 'exists:students,id'],
+            'add_student_ids'   => ['nullable', 'array'],
+            'add_student_ids.*' => ['integer', 'exists:students,id'],
+            'confirm_transfer'  => ['nullable', 'boolean'],
         ];
     }
 

@@ -25,9 +25,15 @@ class StudentController extends Controller
         [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
         $filter = $request->query('filter');
-        
+        $search = $request->query('search');
+
         $query = Student::where('level_id', $level->id)
                         ->where('academic_year_id', $activeYear->id);
+
+        // Fix 11: search by name
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
 
         match($filter) {
             'activated'     => $query->where('is_active', true),
@@ -36,9 +42,9 @@ class StudentController extends Controller
             default         => null
         };
 
-        $students = $query->paginate(25);
+        $students = $query->paginate(25)->withQueryString();
 
-        return view('doctor.students.index', compact('level', 'activeYear', 'students', 'filter'));
+        return view('doctor.students.index', compact('level', 'activeYear', 'students', 'filter', 'search'));
     }
 
     // ── Show Import Form ───────────────────────────────────────────────────────
@@ -47,7 +53,12 @@ class StudentController extends Controller
     {
         [$level, $activeYear] = $this->resolveMiddlewareContext($request);
 
-        return view('doctor.students.import', compact('level', 'activeYear'));
+        // Fix 4: warn doctor if students already exist
+        $studentsExist = Student::where('level_id', $level->id)
+                                ->where('academic_year_id', $activeYear->id)
+                                ->exists();
+
+        return view('doctor.students.import', compact('level', 'activeYear', 'studentsExist'));
     }
 
     // ── Process Import ─────────────────────────────────────────────────────────
@@ -55,6 +66,13 @@ class StudentController extends Controller
     public function import(ImportStudentsRequest $request, Level $level)
     {
         [$level, $activeYear] = $this->resolveMiddlewareContext($request);
+
+        // Fix 4: block if students already exist for this level + year
+        if (Student::where('level_id', $level->id)->where('academic_year_id', $activeYear->id)->exists()) {
+            return redirect()
+                ->route('doctor.students.import', $level->id)
+                ->with('error', __('cms.students.import_blocked_existing'));
+        }
 
         try {
             DB::transaction(function () use ($request, $level, $activeYear) {
@@ -74,7 +92,8 @@ class StudentController extends Controller
                     array_shift($rows)
                 );
 
-                $importer = new StudentsImport($level->id, $activeYear->id);
+                // Fix 1: pass activation deadline to importer
+                $importer = new StudentsImport($level->id, $activeYear->id, $request->input('activation_deadline'));
 
                 // Convert to named-key collection matching what StudentsImport expects
                 $collection = collect($rows)->map(function ($row) use ($headers) {
@@ -139,5 +158,22 @@ class StudentController extends Controller
         $student->restore();
 
         return back()->with('success', __('cms.student.restore_success'));
+    }
+
+    // ── Bulk Permanent Delete (Fix 6) ──────────────────────────────────────────
+
+    public function bulkDestroy(Request $request, Level $level)
+    {
+        [$level, $activeYear] = $this->resolveMiddlewareContext($request);
+
+        // Hard-delete ALL students (including soft-deleted) for this level + year
+        Student::withTrashed()
+               ->where('level_id', $level->id)
+               ->where('academic_year_id', $activeYear->id)
+               ->forceDelete();
+
+        return redirect()
+            ->route('doctor.students.index', $level->id)
+            ->with('success', __('cms.students.bulk_delete_success'));
     }
 }

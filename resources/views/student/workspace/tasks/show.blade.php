@@ -19,7 +19,7 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('student.workspace.show') }}">{{ __('cms.workspace.show_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ $task->title }}</span>
         </div>
         <h1>{{ $task->title }}</h1>
@@ -33,7 +33,7 @@
         </div>
     </div>
     <a href="{{ route('student.workspace.show') }}" class="cms-btn cms-btn-secondary align-self-start">
-        <i class="bi bi-arrow-left"></i> {{ __('cms.general.back') }}
+        <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.general.back') }}
     </a>
 </div>
 
@@ -173,7 +173,7 @@
                                 </span>
                                 <a href="{{ route('student.workspace.subtasks.show', [$task->id, $subTask->id]) }}"
                                    class="cms-btn cms-btn-secondary" style="padding:.3rem .6rem;font-size:.8rem;">
-                                    <i class="bi bi-arrow-right"></i>
+                                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
                                 </a>
                                 @if($isLeader)
                                 <form method="POST" action="{{ route('student.workspace.subtasks.destroy', [$task->id, $subTask->id]) }}"

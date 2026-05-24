@@ -2,7 +2,7 @@
 # Capstone Management System (CMS)
 ## Beni-Suef Technological University
 
-> **Generated:** 2026-05-21 — Read-only audit of the existing codebase. No source files were modified.
+> **Updated:** 2026-05-24 — Read-only audit of the existing codebase. No source files were modified.
 
 ---
 
@@ -438,18 +438,19 @@ All routes prefixed `doctor/{level}/` and protected by `auth`, `role:doctor`, `a
 
 | Feature | Route | Controller Method | View | Status |
 |---------|-------|-------------------|------|--------|
-| List students | `GET /doctor/{level}/students` | `Doctor\StudentController@index` | `doctor/students/index.blade.php` | ✅ Fully working |
-| Import form | `GET /doctor/{level}/students/import` | `Doctor\StudentController@showImport` | `doctor/students/import.blade.php` | ✅ Fully working |
-| Process import | `POST /doctor/{level}/students/import` | `Doctor\StudentController@import` | Redirect with flash | ✅ Fully working |
+| List students (with search) | `GET /doctor/{level}/students` | `Doctor\StudentController@index` | `doctor/students/index.blade.php` | ✅ Fully working |
+| Import form (w/ warning) | `GET /doctor/{level}/students/import` | `Doctor\StudentController@showImport` | `doctor/students/import.blade.php` | ✅ Fully working |
+| Process import (w/ deadline)| `POST /doctor/{level}/students/import` | `Doctor\StudentController@import` | Redirect with flash | ✅ Fully working |
 | Export students | `GET /doctor/{level}/students/export` | `Doctor\StudentController@export` | Downloads XLSX file | ✅ Fully working |
+| Bulk permanent delete | `DELETE /doctor/{level}/students/bulk-destroy` | `Doctor\StudentController@bulkDestroy` | Redirect with flash | ✅ Fully working |
 | Soft-delete student | `DELETE /doctor/{level}/students/{student}` | `Doctor\StudentController@destroy` | Redirect with flash | ✅ Fully working |
 | Restore student | `POST /doctor/{level}/students/{student}/restore` | `Doctor\StudentController@restore` | Redirect with flash | ✅ Fully working |
 
-**Import:** Uses `PhpSpreadsheet` directly to parse XLSX. Runs inside DB transaction via `StudentsImport`. The import generates an `activation_code` for each row and links them to the active year + level.
+**Import:** Uses `PhpSpreadsheet` directly to parse XLSX. Runs inside DB transaction via `StudentsImport`. Checks if students already exist and blocks import if so. Requires an `activation_deadline` which determines `activation_code_expires_at`. The import generates an `activation_code` for each row.
 
 **Export:** Uses `StudentsExport` class (Maatwebsite/Excel-compatible). Downloads `students_level_{id}_year_{id}.xlsx`.
 
-**Filters on student list:** All / Activated / Not Activated / Trashed (soft-deleted).
+**Filters on student list:** All / Activated / Not Activated / Trashed (soft-deleted). Includes search by name with smart Arabic normalization. Includes bulk permanent delete for all students in the level and year.
 
 ---
 
@@ -481,9 +482,9 @@ All routes prefixed `doctor/{level}/` and protected by `auth`, `role:doctor`, `a
 | Delete team | `POST /doctor/{level}/teams/{team}/delete` | `Doctor\TeamController@destroy` | Redirect to index | ✅ Fully working |
 
 **Business logic (via `TeamService`):**
-- `createTeam`: validates leader belongs to level + year; attaches all members.
-- `addStudents`: validates each student belongs to level + year; rejects already-assigned students.
-- `removeStudent`: cannot remove the current leader (must change leader first).
+- `createTeam`: validates leader belongs to level + year; attaches all members. UI includes leader dropdown sync and member live search.
+- `addStudents` / `removeStudent`: validates each student belongs to level + year. Guarded by **workspace lock** (throws `ValidationException` if workspace exists).
+- `transferStudent`: allows transferring a student directly between teams via the edit page with a same-page confirmation modal.
 - `setLeader`: new leader must already be a team member.
 - `deleteTeam`: cascades via DB foreign keys to `team_student`, `team_project`, `team_requests`.
 
@@ -498,10 +499,10 @@ All routes prefixed `doctor/{level}/` and protected by `auth`, `role:doctor`, `a
 | Confirm distribution | `POST /doctor/{level}/teams/distribute/confirm` | `Doctor\TeamDistributionController@confirm` | Redirect to teams index | ✅ Fully working |
 
 **Two modes available (via `TeamDistributionService`):**
-- `balanced` — distributes all unassigned students into groups as evenly as possible.
+- `balanced` — distributes all **activated** unassigned students into groups as evenly as possible.
 - `fixed` — creates groups of a specified size; leftover (remainder) students are shown separately.
 
-Preview stores distribution data in session; confirm reads from session and persists to DB.
+Preview stores distribution data in session. Includes an **editable distribution preview** allowing the doctor to manually move students between groups before confirming.
 
 ---
 
@@ -516,6 +517,20 @@ Preview stores distribution data in session; confirm reads from session and pers
 **Business logic (via `TeamRequestService`):**
 - `approve`: applies the change (updates team name if requested; upserts `team_project` if project requested). Sets `reviewed_by`, `reviewed_at`, `status = approved`.
 - `reject`: sets status to rejected without changing team state.
+
+---
+
+#### Workspace & Submissions (Level-Scoped)
+
+| Feature | Route | Controller Method | View | Status |
+|---------|-------|-------------------|------|--------|
+| View workspace | `GET /doctor/{level}/workspaces/{workspace}` | `Doctor\WorkspaceController@show` | `doctor/workspaces/show.blade.php` | ✅ Fully working |
+| Download submission | `GET /doctor/{level}/workspaces/{workspace}/tasks/{task}/submissions/{submission}/download` | `Doctor\SubmissionReviewController@download` | Downloads File | ✅ Fully working |
+
+**Features:**
+- Shows workspace tasks, subtasks, and submissions.
+- Includes a **Files Archive tab** eager-loading all team submissions.
+- Direct **File download** buttons for any submitted file.
 
 ---
 
@@ -578,7 +593,21 @@ Validates: email+password, `is_active = true`, student's `academic_year_id` === 
 1. Only team leader can submit.
 2. At least one of `requested_name` or `project_idea_id` must be filled.
 3. No pending request may already exist for the team.
-4. Project idea must belong to the same level + year.
+4. Project idea must belong to the same level + year, and already-approved ideas are filtered out of the dropdown.
+
+---
+
+#### Workspace & Submissions
+
+| Feature | Route | Controller Method | View | Status |
+|---------|-------|-------------------|------|--------|
+| View workspace | `GET /student/workspace` | `Student\WorkspaceController@show` | `student/workspace/show.blade.php` | ✅ Fully working |
+| Download submission | `GET /student/workspace/submissions/{submission}/download` | `Student\SubmissionController@download` | Downloads File | ✅ Fully working |
+
+**Features:**
+- Shows team's workspace, tasks, and phases.
+- Includes a **Files Archive tab** eager-loading all team submissions (so students can see their teammates' files).
+- Direct **File download** buttons for any submitted file.
 
 ---
 
@@ -637,6 +666,26 @@ Validates: email+password, `is_active = true`, student's `academic_year_id` === 
 | Doctor approves team request (project only) | ✅ Pass | Only project upserted; name unchanged |
 | Doctor rejects team request | ✅ Pass | Team state unchanged; request marked rejected |
 | Language switch (AR ↔ EN) | ✅ Pass | `POST /language/switch` writes to session; `SetLocale` reads on next request |
+| Bulk permanent delete | ✅ Pass | Force-deletes all students for a level+year |
+| Import block existing | ✅ Pass | Blocks import if students exist, shows warning |
+| Import activation deadline | ✅ Pass | Stores deadline; expires activation codes |
+| Student search (Backend) | ✅ Pass | Normalizes Arabic presentation forms in DB |
+| Leader auto-check & lock | ✅ Pass | JS syncs leader dropdown with members list |
+| Team member live search | ✅ Pass | JS search with Arabic normalization (NFKC) |
+| Workspace lock add/remove | ✅ Pass | `ValidationException` thrown if workspace exists |
+| Transfer student confirmation | ✅ Pass | Same-page modal flashes on `transfer_confirm` |
+| Transfer student execute | ✅ Pass | Removes from old team, adds to new team |
+| Editable preview (Move to Group)| ✅ Pass | Modifies session array, re-hydrates properly |
+| Distribution activated-only | ✅ Pass | `getUnassigned()` excludes `is_active = false` |
+| Filter approved project ideas | ✅ Pass | Join `team_requests` to exclude approved ideas |
+| Doctor file download | ✅ Pass | Downloads via `Storage::disk('local')->download()` |
+| Student file download | ✅ Pass | Downloads via `Storage::disk('local')->download()` |
+| Doctor files archive tab | ✅ Pass | Eager-loads subTasks.submissions |
+| Student files archive tab | ✅ Pass | Shows all team submissions, not just own |
+| Transfer modal UI | ✅ Pass | Flashes old team name + student avatars |
+| Bulk delete modal UI | ✅ Pass | Warning text correctly localized |
+| Search clear UI | ✅ Pass | Cancel badge correctly resets search param |
+| Download missing file | ✅ Pass | Handles missing physical file gracefully |
 
 ---
 
@@ -663,7 +712,6 @@ Validates: email+password, `is_active = true`, student's `academic_year_id` === 
 | Email notifications | No Mailable classes or email notifications exist (e.g., on doctor approval, on student activation code generation). | Not implemented |
 | Pagination on doctor/admin lists | Doctor and admin-side lists (approved doctors, pending doctors) use `->get()` — no pagination. Only `doctor/students/index` uses `->paginate(25)`. | Partial |
 | Team project view for all members | Non-leader students can see their team's current project, but cannot submit any change requests (correct by design). | By design |
-| File attachments / submissions | No feature for students to upload files or submit deliverables. | Not implemented (likely future sprint) |
 | Grading / evaluation | No grade or evaluation system exists. | Not implemented (likely future sprint) |
 | Admin role for level seeding | Levels (`Level 2`, `Level 4`) are seeded via `LevelsSeeder`. There is no admin UI to add/edit/delete levels. | By design for now |
 
@@ -888,6 +936,16 @@ lang/
 - Updated i18n with full `teams` section (30+ AR + EN keys)
 
 **Test results for Sprint 3:** All code paths verified via code-audit analysis. See Section 5 for full test matrix. No runtime execution environment was available for automated test confirmation.
+
+---
+
+### Patch A (Post-Sprint 4) — ✅ Done
+
+**Delivered Critical & Important Fixes:**
+- **Student Management:** Bulk delete, import blocking for existing students, activation deadline implementation, search with Arabic presentation form normalization.
+- **Team Management:** Workspace lock for adding/removing members, student transfer between teams, editable distribution preview (move between groups), frontend live search for members with Arabic NFKC normalization, leader dropdown sync.
+- **Student Team:** Approved project ideas filtered out of request dropdown.
+- **Workspaces:** Doctor & Student files archive tabs, file download endpoints, eager-loading submissions.
 
 ---
 

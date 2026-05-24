@@ -19,6 +19,7 @@ class TeamDistributionService
     {
         return Student::where('level_id', $level->id)
                       ->where('academic_year_id', $year->id)
+                      ->where('is_active', true) // Fix 3: only activated students are distributed
                       ->whereDoesntHave('teams', fn ($q) =>
                           $q->where('team_student.academic_year_id', $year->id)
                       )

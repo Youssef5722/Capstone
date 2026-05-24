@@ -38,7 +38,8 @@ class WorkspaceController extends Controller
             'phases.tasks.submissions',
             'tasks.phase',
             'tasks.assignee',
-            'tasks.submissions',
+            'tasks.submissions.submitter',     // Fix 9: Files tab
+            'tasks.subTasks.submissions.submitter', // Fix 9: subtask files
         ]);
 
         // Aggregate stats

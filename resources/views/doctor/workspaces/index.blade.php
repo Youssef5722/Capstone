@@ -21,7 +21,7 @@
 .ws-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0; inset-inline-start: 0; inset-inline-end: 0;
     height: 2px;
     background: linear-gradient(90deg, #a78bfa, #0AFFFF);
     opacity: 0;
@@ -111,9 +111,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right" style="font-size:.65rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:.65rem;"></i>
             <span>{{ $level->name }}</span>
-            <i class="bi bi-chevron-right" style="font-size:.65rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:.65rem;"></i>
             <span>{{ __('cms.workspace.index_title') }}</span>
         </div>
         <h1>{{ __('cms.workspace.index_title') }}</h1>
@@ -196,7 +196,7 @@
                             <a href="{{ route('doctor.workspaces.show', [$level, $ws]) }}"
                                class="cms-btn cms-btn-primary w-100 justify-content-center">
                                 {{ __('cms.workspace.view_workspace') }}
-                                <i class="bi bi-arrow-right ms-2"></i>
+                                <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-2"></i>
                             </a>
                         </div>
 

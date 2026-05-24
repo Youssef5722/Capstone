@@ -9,11 +9,11 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('doctor.dashboard') }}">{{ __('cms.nav.dashboard') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.teams.index', $level) }}">{{ __('cms.teams.index_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('doctor.teams.distribute', $level) }}">{{ __('cms.teams.distribute_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ __('cms.teams.preview_title') }}</span>
         </div>
         <h1>{{ __('cms.teams.preview_title') }}</h1>
@@ -67,11 +67,29 @@
                             <div class="user-avatar" style="width:26px;height:26px;font-size:.65rem;">
                                 {{ strtoupper(substr($student->name, 0, 1)) }}
                             </div>
-                            <span style="font-size:.9rem;">{{ $student->name }}</span>
+                            <span style="font-size:.9rem;flex:1;">{{ $student->name }}</span>
                             @if($j === 0)
                                 <span class="cms-badge cms-badge-success" style="font-size:.65rem;padding:.15rem .4rem;">
                                     {{ __('cms.teams.auto_leader') }}
                                 </span>
+                            @endif
+                            {{-- Fix 7: move to another group --}}
+                            @if(count($groups) > 1)
+                            <form method="POST" action="{{ route('doctor.teams.distribute.adjust', $level) }}" class="d-flex gap-1 align-items-center">
+                                @csrf
+                                <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                <input type="hidden" name="from_group" value="{{ $i }}">
+                                <select name="to_group" class="form-select form-select-sm" style="width:auto;font-size:.75rem;padding:.15rem .4rem;">
+                                    @foreach($groups as $gi => $g)
+                                        @if($gi !== $i)
+                                        <option value="{{ $gi }}">{{ __('cms.teams.group_n', ['n' => $gi + 1]) }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                <button type="submit" class="cms-btn cms-btn-secondary" style="padding:.15rem .4rem;font-size:.75rem;" title="{{ __('cms.teams.adjust_move_btn') }}">
+                                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
+                                </button>
+                            </form>
                             @endif
                         </li>
                         @endforeach
@@ -115,7 +133,7 @@
         </button>
     </form>
     <a href="{{ route('doctor.teams.distribute', $level) }}" class="cms-btn cms-btn-secondary">
-        <i class="bi bi-arrow-left"></i> {{ __('cms.general.back') }}
+        <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.general.back') }}
     </a>
 </div>
 

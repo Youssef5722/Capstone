@@ -289,6 +289,25 @@ return [
         'status_activated'      => 'مفعَّل',
         'status_pending'        => 'معلق',
         'confirm_delete'        => 'هل أنت متأكد من حذف هذا الطالب؟ لا يمكن التراجع.',
+        // Fix 1
+        'activation_deadline'      => 'آخر موعد للتفعيل',
+        'activation_deadline_hint' => 'لن يتمكن الطلاب من تفعيل حساباتهم بعد هذا التاريخ.',
+        'name' => 'اسم الطالب',
+    ],
+
+    // ── Students (plural, controller-level) ──────────────────────────────────
+    'students' => [
+        // Fix 4
+        'import_blocked_existing' => 'الاستيراد محظور: يوجد طلاب بالفعل لهذا المستوى والسنة الدراسية. استخدم الحذف الشامل أولاً إن أردت إعادة الاستيراد.',
+        // Fix 6
+        'bulk_delete_btn'           => 'حذف جميع الطلاب',
+        'bulk_delete_success'       => 'تم حذف جميع الطلاب لهذا المستوى والسنة نهائياً.',
+        'bulk_delete_confirm_title' => 'حذف جميع الطلاب نهائياً؟',
+        'bulk_delete_confirm_body'  => 'سيؤدي هذا الإجراء إلى حذف جميع الطلاب (بما فيهم المحذوفون) لهذا المستوى والسنة نهائياً ولا يمكن التراجع عنه. قد تتأثر الفرق ومساحات العمل.',
+        'bulk_delete_confirm_btn'   => 'نعم، احذف الجميع',
+        // Fix 11
+        'search_placeholder'        => 'البحث بالاسم...',
+        'transfer_cancel_btn' => 'إلغاء النقل',
     ],
 
     // ── General UI ───────────────────────────────────────────
@@ -305,6 +324,9 @@ return [
         'confirm_delete'=> 'هل أنت متأكد من الحذف؟ لا يمكن التراجع.',
         'loading'       => 'جاري التحميل...',
         'welcome_admin' => 'مرحباً بك يا مدير النظام',
+        'created_at'  => 'تاريخ الإنشاء',
+        'back_home'   => 'العودة للرئيسية',
+        'pagination'  => 'التنقل بين الصفحات',
     ],
 
     // ── Language switcher ────────────────────────────────────
@@ -445,6 +467,22 @@ return [
         'confirm_distribute'        => 'سيؤدي هذا إلى إنشاء هذه الفرق وتعيين الطلاب بشكل نهائي. هل تريد المتابعة؟',
         'confirm_approve_request'   => 'الموافقة على هذا الطلب وتطبيق التغييرات؟',
         'confirm_reject_request'    => 'رفض هذا الطلب؟',
+        // Fix 2
+        'locked_by_workspace'       => 'هذا الفريق لديه مساحة عمل نشطة. تعديل الأعضاء مقفل.',
+        // Fix 3
+        'distribute_activated_note' => 'يتم توزيع الطلاب المفعَّلين فقط.',
+        // Fix 7
+        'adjust_invalid'            => 'نقل غير صالح: الطالب أو المجموعة غير موجودة في المعاينة الحالية.',
+        'adjust_preview_success'    => 'تم نقل الطالب بنجاح. راجع المعاينة المحدثة أدناه.',
+        'adjust_move_btn'           => 'نقل',
+        'adjust_to_group_label'     => 'نقل إلى مجموعة',
+        // Fix 10
+        'transfer_blocked_workspace'=> 'لا يمكن النقل: الفريق المصدر لديه مساحة عمل نشطة.',
+        'transfer_confirm_title'    => 'تأكيد نقل الطالب',
+        'transfer_confirm_body'     => 'الطالب/الطلاب التاليون موجودون بالفعل في فريق آخر. تأكيد لنقلهم إلى هذا الفريق:',
+        'transfer_confirm_btn'      => 'تأكيد النقل',
+        'transfer_cancel_btn'       => 'إلغاء',
+        'unassigned_students'       => 'طلاب غير معينين (مفعَّلون)',
     ],
 
     // ── Workspace (Sprint 4) ─────────────────────────────────────────────────
@@ -479,6 +517,12 @@ return [
         'approved_tasks'    => 'مهام معتمدة',
         'pending_tasks'     => 'مهام معلقة',
         'total_tasks'       => 'إجمالي المهام',
+        // Fix 9
+        'tab_files_archive'   => 'أرشيف الملفات',
+        'files_archive_title' => 'جميع ملفات الفريق',
+        'files_archive_empty' => 'لم يتم رفع أي ملفات بعد.',
+        'files_archive_task'  => 'مهمة',
+        'files_archive_subtask' => 'مهمة فرعية',
     ],
 
     // ── Phases (Sprint 4) ────────────────────────────────────────────────────
@@ -602,6 +646,8 @@ return [
         'review_submission'      => 'مراجعة الملف',
         'reviewed_by'            => 'راجع بواسطة',
         'reviewed_at'            => 'تاريخ المراجعة',
+        // Fix 8
+        'download_btn'           => 'تحميل',
     ],
 
     // ── Comments (Sprint 4) ──────────────────────────────────────────────────
@@ -614,6 +660,29 @@ return [
         'posted_success'  => 'تم إرسال التعليق بنجاح.',
         'by'              => 'بواسطة',
         'at'              => 'في',
+    ],
+    // ── UI Strings (Patch B) ─────────────────────────────────────────────────
+    'ui' => [
+        'year_placeholder'          => 'مثال: 2024/2025',
+        'doctor_name_placeholder'   => 'د. أحمد محمد',
+        'doctor_email_placeholder'  => 'ahmed.mohamed@university.edu',
+        'national_id_placeholder'   => 'مثال: 29901011234567',
+        'idea_title_placeholder'    => 'مثال: نظام ذكي لإدارة الحرم الجامعي',
+        'idea_desc_placeholder'     => 'صف فكرة المشروع، أهدافه، والنتائج المتوقعة...',
+        'status_pending'            => 'قيد الانتظار',
+        'expected_columns'          => 'أعمدة الإكسل المتوقعة:',
+        'col_name'                  => 'name',
+        'col_university_id'         => 'university_id',
+        'required'                  => '(مطلوب)',
+        'privacy_policy'            => 'سياسة الخصوصية',
+        'terms_of_service'          => 'شروط الخدمة',
+        'university_guidelines'     => 'إرشادات الجامعة',
+        'home'                      => 'الرئيسية',
+        'dashboard'                 => 'لوحة التحكم',
+        'sign_out'                  => 'تسجيل الخروج',
+        'activation_code_placeholder' => 'مثال: STU-2024-XXXX.edu',
+        'email_placeholder'         => 'name.edu',
+        'leader'                    => 'القائد',
     ],
 
 ];

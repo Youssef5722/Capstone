@@ -147,7 +147,7 @@
                         </div>
 
                         <button type="submit" class="btn-primary-doctor">
-                            {{ __('cms.auth.sign_in_btn') }} <i class="bi bi-arrow-right ms-2"></i>
+                            {{ __('cms.auth.sign_in_btn') }} <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-2"></i>
                         </button>
                     </form>
 
@@ -178,7 +178,7 @@
                                 <div class="input-icon-wrapper">
                                     <i class="bi bi-person prefix-icon"></i>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="regFullName"
-                                           placeholder="Dr. Jane Doe" value="{{ old('name') }}" required>
+                                           placeholder="{{ __('cms.ui.doctor_name_placeholder') }}" value="{{ old('name') }}" required>
                                 </div>
                                 @error('name')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -192,7 +192,7 @@
                                 <div class="input-icon-wrapper">
                                     <i class="bi bi-envelope prefix-icon"></i>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="regEmail"
-                                           placeholder="jane.doe@university.edu" value="{{ old('email') }}" required>
+                                           placeholder="{{ __('cms.ui.doctor_email_placeholder') }}" value="{{ old('email') }}" required>
                                 </div>
                                 @error('email')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -212,7 +212,7 @@
                                     <input type="text"
                                            class="form-control @error('national_id') is-invalid @enderror"
                                            name="national_id" id="regNationalId"
-                                           placeholder="e.g. 29901011234567"
+                                           placeholder="{{ __('cms.ui.national_id_placeholder') }}"
                                            value="{{ old('national_id') }}"
                                            maxlength="14" minlength="14"
                                            inputmode="numeric"
@@ -325,7 +325,7 @@
                         </div>
 
                         <button type="submit" class="btn-primary-doctor mt-2">
-                            {{ __('cms.auth.create_account_btn') }} <i class="bi bi-arrow-right ms-2"></i>
+                            {{ __('cms.auth.create_account_btn') }} <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} ms-2"></i>
                         </button>
                     </form>
 

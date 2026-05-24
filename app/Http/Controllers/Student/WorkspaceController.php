@@ -27,7 +27,8 @@ class WorkspaceController extends Controller
             'phases.tasks',
             'tasks.phase',
             'tasks.subTasks',
-            'tasks.submissions',
+            'tasks.submissions.submitter',          // Fix 9: Files tab
+            'tasks.subTasks.submissions.submitter', // Fix 9: subtask files
         ]);
 
         // Tasks assigned to THIS student (they are the leader, all tasks are assigned to them)

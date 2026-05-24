@@ -221,7 +221,7 @@ a {
 }
 .input-icon-wrapper i.prefix-icon {
     position: absolute;
-    left: 1rem;
+    inset-inline-start: 1rem;
     color: #4a5568;
     pointer-events: none;
 }
@@ -230,7 +230,7 @@ a {
 }
 .input-icon-wrapper .btn-toggle-password {
     position: absolute;
-    right: 0.5rem;
+    inset-inline-end: 0.5rem;
     background: none;
     border: none;
     color: #4a5568;

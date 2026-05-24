@@ -54,4 +54,24 @@ class SubmissionController extends Controller
         return redirect($redirectRoute)
             ->with('success', __('cms.submissions.uploaded_success'));
     }
+
+    // Fix 8: file download for student
+    public function download(Request $request, \App\Models\Submission $submission)
+    {
+        $student   = auth('student')->user();
+        $workspace = $request->attributes->get('studentWorkspace');
+
+        // Verify submission belongs to a task/subtask in this student's workspace
+        $submittable = $submission->submittable;
+        $taskWorkspaceId = match(true) {
+            $submittable instanceof \App\Models\Task    => $submittable->workspace_id,
+            $submittable instanceof \App\Models\SubTask => $submittable->task->workspace_id,
+            default                                     => null,
+        };
+
+        abort_unless($taskWorkspaceId === $workspace->id, 403);
+
+        return \Illuminate\Support\Facades\Storage::disk('local')
+            ->download($submission->file_path, $submission->file_name);
+    }
 }

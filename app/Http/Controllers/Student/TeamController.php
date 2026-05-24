@@ -46,9 +46,20 @@ class TeamController extends Controller
                     ->first();
 
                 // Leader can pick from available ideas in their level + year
+                // Fix 5: exclude ideas that are already approved in this level+year
+                // team_requests has no level_id — must join through teams
                 if ($isLeader) {
+                    $approvedIdeaIds = \DB::table('team_requests')
+                        ->join('teams', 'teams.id', '=', 'team_requests.team_id')
+                        ->where('team_requests.status', 'approved')
+                        ->whereNotNull('team_requests.project_idea_id')
+                        ->where('teams.level_id', $team->level_id)
+                        ->where('teams.academic_year_id', $activeYear->id)
+                        ->pluck('team_requests.project_idea_id');
+
                     $availableProjects = ProjectIdea::where('level_id', $team->level_id)
                         ->where('academic_year_id', $activeYear->id)
+                        ->whereNotIn('id', $approvedIdeaIds)
                         ->get();
                 }
             }

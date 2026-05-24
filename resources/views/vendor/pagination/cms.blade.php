@@ -4,11 +4,11 @@
     {{-- ── Previous ──────────────────────────────────────── --}}
     @if ($paginator->onFirstPage())
         <span class="cms-page-btn disabled" aria-disabled="true">
-            <i class="bi bi-chevron-left"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i>
         </span>
     @else
         <a href="{{ $paginator->previousPageUrl() }}" class="cms-page-btn" aria-label="Previous">
-            <i class="bi bi-chevron-left"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i>
         </a>
     @endif
 
@@ -34,11 +34,11 @@
     {{-- ── Next ──────────────────────────────────────────── --}}
     @if ($paginator->hasMorePages())
         <a href="{{ $paginator->nextPageUrl() }}" class="cms-page-btn" aria-label="Next">
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
         </a>
     @else
         <span class="cms-page-btn disabled" aria-disabled="true">
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
         </span>
     @endif
 

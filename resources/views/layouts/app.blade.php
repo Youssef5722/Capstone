@@ -146,7 +146,7 @@
 
         <span class="cms-nav-section" style="margin-top: 1rem;">{{ __('cms.general.actions') ?? 'Actions' }}</span>
         <a href="{{ route('doctor.dashboard') }}" class="cms-nav-item">
-            <i class="bi bi-arrow-left"></i> {{ __('cms.doctor.back_to_dashboard') }}
+            <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.doctor.back_to_dashboard') }}
         </a>
         @endisset
 
@@ -236,9 +236,9 @@
 <footer class="cms-footer">
     <div class="cms-footer-brand">CMS</div>
     <nav class="cms-footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">University Guidelines</a>
+        <a href="#">{{ __('cms.ui.privacy_policy') }}</a>
+        <a href="#">{{ __('cms.ui.terms_of_service') }}</a>
+        <a href="#">{{ __('cms.ui.university_guidelines') }}</a>
     </nav>
     <div>&copy; {{ date('Y') }} Capstone Management System</div>
 </footer>

@@ -11,11 +11,11 @@
             <a href="{{ route('doctor.dashboard') }}" style="color:inherit;text-decoration:none;">
                 <i class="bi bi-house-fill"></i>
             </a>
-            <i class="bi bi-chevron-right" style="font-size:.7rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:.7rem;"></i>
             <a href="{{ route('doctor.ideas.index', $level->id) }}" style="color:inherit;text-decoration:none;">
                 {{ __('cms.doctor.ideas_title') }}
             </a>
-            <i class="bi bi-chevron-right" style="font-size:.7rem;"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}" style="font-size:.7rem;"></i>
             <span>{{ __('cms.doctor.edit_idea') }}</span>
         </div>
         <h1>{{ __('cms.doctor.edit_idea') }}</h1>
@@ -74,7 +74,7 @@
                     <i class="bi bi-check-lg me-1"></i> {{ __('cms.general.save') }}
                 </button>
                 <a href="{{ route('doctor.ideas.index', $level->id) }}" class="cms-btn cms-btn-secondary">
-                    <i class="bi bi-arrow-left me-1"></i> {{ __('cms.general.back') }}
+                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }} me-1"></i> {{ __('cms.general.back') }}
                 </a>
             </div>
         </form>

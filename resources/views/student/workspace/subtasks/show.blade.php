@@ -19,9 +19,9 @@
         <div class="cms-breadcrumb">
             <i class="bi bi-house-fill"></i>
             <a href="{{ route('student.workspace.show') }}">{{ __('cms.workspace.show_title') }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <a href="{{ route('student.workspace.tasks.show', $task->id) }}">{{ $task->title }}</a>
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
             <span>{{ $subTask->title }}</span>
         </div>
         <h1>{{ $subTask->title }}</h1>
@@ -35,7 +35,7 @@
         </div>
     </div>
     <a href="{{ route('student.workspace.tasks.show', $task->id) }}" class="cms-btn cms-btn-secondary align-self-start">
-        <i class="bi bi-arrow-left"></i> {{ __('cms.subtasks.back_to_task') }}
+        <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i> {{ __('cms.subtasks.back_to_task') }}
     </a>
 </div>
 
