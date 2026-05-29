@@ -261,3 +261,50 @@ Route::middleware(['auth:student', 'student.year.active', 'active.year', 'in.tea
         // ── Comments (student — polymorphic) ──────────────────────────────────
         Route::post('/comments', [StudentTaskCommentController::class, 'store'])->name('comments.store');
     });
+
+// ─── Sprint 5: Profile Management (Admin + Doctor) ────────────────────────────
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PasswordResetController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile',             [ProfileController::class, 'show'])           ->name('profile.show');
+    Route::put('/profile',             [ProfileController::class, 'update'])          ->name('profile.update');
+    Route::put('/profile/password',    [ProfileController::class, 'updatePassword'])  ->name('profile.password');
+});
+
+// ─── Sprint 5: Profile Management (Student) ───────────────────────────────────
+
+use App\Http\Controllers\Student\ProfileController as StudentProfileController;
+use App\Http\Controllers\Student\PasswordResetController as StudentPasswordResetController;
+
+Route::middleware(['auth:student', 'student.year.active'])->group(function () {
+    Route::get('/student/profile',          [StudentProfileController::class, 'show'])           ->name('student.profile.show');
+    Route::put('/student/profile',          [StudentProfileController::class, 'update'])          ->name('student.profile.update');
+    Route::put('/student/profile/password', [StudentProfileController::class, 'updatePassword'])  ->name('student.profile.password');
+});
+
+// ─── Sprint 5: Forgot / Reset Password (Admin + Doctor, guest only) ───────────
+
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password',            [PasswordResetController::class, 'showRequest'])   ->name('password.request');
+    Route::post('/forgot-password',           [PasswordResetController::class, 'sendResetLink']) ->name('password.email');
+    Route::get('/reset-password/{token}',     [PasswordResetController::class, 'showReset'])     ->name('password.reset');
+    Route::post('/reset-password',            [PasswordResetController::class, 'reset'])         ->name('password.update');
+});
+
+// ─── Sprint 5: Forgot / Reset Password (Student, guest:student only) ──────────
+
+Route::middleware('guest:student')->group(function () {
+    Route::get('/student/forgot-password',        [StudentPasswordResetController::class, 'showRequest'])   ->name('student.password.request');
+    Route::post('/student/forgot-password',       [StudentPasswordResetController::class, 'sendResetLink']) ->name('student.password.email');
+    Route::get('/student/reset-password/{token}', [StudentPasswordResetController::class, 'showReset'])     ->name('student.password.reset');
+    Route::post('/student/reset-password',        [StudentPasswordResetController::class, 'reset'])         ->name('student.password.update');
+});
+
+// ─── Sprint 5 (v2): Avatar Upload ─────────────────────────────────────────────
+
+Route::middleware('auth')->post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+
+Route::middleware(['auth:student', 'student.year.active'])->post('/student/profile/avatar', [StudentProfileController::class, 'updateAvatar'])->name('student.profile.avatar');
+

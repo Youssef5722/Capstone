@@ -99,6 +99,19 @@ return [
         'role_student_desc'     => 'Manage your capstone project, team, and tasks with advanced collaboration tools.',
         'role_doctor'           => 'Doctor',
         'role_doctor_desc'      => 'Supervise projects, review submissions, and track student progress across multiple teams.',
+        // Sprint 5: Password Reset
+        'forgot_password_title'    => 'Forgot Password',
+        'forgot_password_desc'     => 'Enter your email address and we\'ll send you a password reset link.',
+        'reset_password_title'     => 'Reset Password',
+        'reset_password_desc'      => 'Enter your new password below to reset your account.',
+        'reset_link_sent'          => 'If an account with that email exists, a password reset link has been sent.',
+        'reset_success'            => 'Your password has been reset. You can now log in with your new password.',
+        'token_expired'            => 'This reset link has expired or is invalid. Please request a new one.',
+        'send_reset_link'          => 'Send Reset Link',
+        'reset_password_btn'       => 'Reset Password',
+        'back_to_login'            => 'Back to Login',
+        'email_for_reset'          => 'Email Address',
+        'role_admin'               => 'Admin',
     ],
 
     // ── Admin: Doctors ───────────────────────────────────────
@@ -261,6 +274,7 @@ return [
         'dashboard_title'     => 'Student Portal',
         'welcome'             => 'Welcome, :name',
         'portal_intro'        => 'This is your academic student portal.',
+        'name'                => 'Full Name',
         'university_id'       => 'University ID',
         'email'               => 'Email',
         'activation_invalid'    => 'Invalid activation code.',
@@ -685,4 +699,32 @@ return [
         'leader'                    => 'Leader',
     ],
 
+    // ── Profile (Sprint 5) ───────────────────────────────────────────────────
+    'profile' => [
+        'title'                    => 'My Profile',
+        'tab_info'                 => 'Personal Info',
+        'tab_password'             => 'Change Password',
+        'update_success'           => 'Profile updated successfully.',
+        'password_updated'         => 'Password changed successfully.',
+        'current_password_wrong'   => 'The current password you entered is incorrect.',
+        'role_label'               => 'Role',
+        'role_admin'               => 'Admin',
+        'role_doctor'              => 'Doctor',
+        'requested_levels_label'   => 'Requested Levels',
+        'no_requested_levels'      => 'No levels requested.',
+        'university_id_label'      => 'University ID',
+        'level_label'              => 'Level',
+        'current_password'         => 'Current Password',
+        'new_password'             => 'New Password',
+        'confirm_password'         => 'Confirm New Password',
+        'save_info'                => 'Save Changes',
+        'save_password'            => 'Update Password',
+        'read_only'                => 'Read-only',
+        // Sprint 5 v2
+        'avatar_updated'           => 'Profile photo updated.',
+        'avatar_upload'            => 'Change Photo',
+        'view_profile'             => 'Profile',
+    ],
+
 ];
+

@@ -14,11 +14,67 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Dashboard Design System (extends auth.css tokens) -->
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+    <style>
+    /* ── Navbar user dropdown ───────────────────── */
+    .nav-user-dropdown {
+        background: var(--surface-card);
+        border: 1px solid var(--border-sub);
+        border-radius: 14px;
+        min-width: 200px;
+        padding: 0.4rem;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+        margin-top: 0.5rem !important;
+    }
+    .nav-dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.6rem 0.85rem;
+        border-radius: 9px;
+        font-size: 0.83rem;
+        font-weight: 500;
+        font-family: var(--font);
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+        border: none;
+        background: none;
+        width: 100%;
+        cursor: pointer;
+        text-align: start;
+    }
+    .nav-dropdown-item i { font-size: 0.9rem; flex-shrink: 0; }
+    .nav-dropdown-item:hover {
+        background: rgba(122,34,253,0.1);
+        color: #c4b5fd;
+    }
+    .nav-dropdown-item:hover i { color: #a78bfa; }
+    .nav-dropdown-item.danger { color: #f87171; }
+    .nav-dropdown-item.danger:hover {
+        background: rgba(239,68,68,0.1);
+        color: #f87171;
+    }
+    .nav-dropdown-item.danger i { color: #f87171; }
+    .nav-dd-divider {
+        height: 1px;
+        background: var(--border-sub);
+        margin: 0.3rem 0.2rem;
+    }
+    .nav-dd-header {
+        padding: 0.35rem 0.85rem 0.2rem;
+        font-size: 0.66rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-faint);
+    }
+    </style>
     @stack('styles')
 </head>
 <body>
 
 @php
+    use Illuminate\Support\Facades\Storage as LayoutStorage;
     $webUser     = auth('web')->user();
     $studentUser = auth('student')->user();
     $isAdmin     = $webUser && $webUser->role?->name === 'admin';
@@ -64,23 +120,49 @@
         </div>
 
         @if($currentUser)
-        <!-- User Pill -->
-        <div class="cms-user-pill d-none d-md-flex">
-            <div class="user-avatar">{{ $userInitials }}</div>
-            <div>
-                <div class="user-name">{{ $currentUser->name }}</div>
-                <div class="user-role">{{ $roleName }}</div>
-            </div>
-        </div>
-
-        <!-- Logout -->
-        <form method="POST" action="{{ $logoutRoute }}">
-            @csrf
-            <button type="submit" class="cms-logout-btn">
-                <i class="bi bi-box-arrow-right"></i>
-                <span class="d-none d-md-inline">{{ __('cms.nav.logout') }}</span>
+        @php
+            $avatarPath = $currentUser->avatar ?? null;
+            $profileRoute = $isStudent ? route('student.profile.show') : route('profile.show');
+        @endphp
+        <!-- User Pill Dropdown -->
+        <div class="dropdown d-none d-md-block">
+            <button class="cms-user-pill border-0 dropdown-toggle" type="button"
+                    id="navUserDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="cursor:pointer;">
+                <div class="user-avatar overflow-hidden">
+                    @if($avatarPath)
+                        <img src="{{ LayoutStorage::url($avatarPath) }}"
+                             alt="{{ $currentUser->name }}"
+                             style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                    @else
+                        {{ $userInitials }}
+                    @endif
+                </div>
+                <div>
+                    <div class="user-name">{{ $currentUser->name }}</div>
+                    <div class="user-role">{{ $roleName }}</div>
+                </div>
             </button>
-        </form>
+            <ul class="dropdown-menu nav-user-dropdown dropdown-menu-end" aria-labelledby="navUserDropdown">
+                <li class="nav-dd-header">{{ $currentUser->name }}</li>
+                <li>
+                    <a class="nav-dropdown-item" href="{{ $profileRoute }}">
+                        <i class="bi bi-person-gear"></i>
+                        {{ __('cms.profile.view_profile') }}
+                    </a>
+                </li>
+                <li><div class="nav-dd-divider"></div></li>
+                <li>
+                    <form method="POST" action="{{ $logoutRoute }}">
+                        @csrf
+                        <button type="submit" class="nav-dropdown-item danger">
+                            <i class="bi bi-box-arrow-right"></i>
+                            {{ __('cms.nav.logout') }}
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
         @endif
     </div>
 </nav>
@@ -161,6 +243,9 @@
         </a>
         <a href="{{ route('student.workspace.show') }}" class="cms-nav-item {{ request()->routeIs('student.workspace.*') ? 'active' : '' }}">
             <i class="bi bi-grid-3x3-gap-fill"></i> {{ __('cms.workspace.nav') }}
+        </a>
+        <a href="{{ route('student.profile.show') }}" class="cms-nav-item {{ request()->routeIs('student.profile.*') ? 'active' : '' }}">
+            <i class="bi bi-person-gear"></i> {{ __('cms.profile.title') }}
         </a>
         @endif
 

@@ -111,7 +111,7 @@
                     <tbody>
                         @foreach($students as $i => $student)
                         <tr>
-                            <td class="text-muted" style="font-size:.8rem;">{{ $i + 1 }}</td>
+                            <td class="" style="font-size:.8rem;">{{ $i + 1 }}</td>
                             <td>
                                 <span style="font-weight:600;">{{ $student->name }}</span>
                             </td>

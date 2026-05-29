@@ -9,7 +9,7 @@ class Student extends Authenticatable
 {
     use SoftDeletes;
 
-    protected $fillable = ['name','university_id','email','password',
+    protected $fillable = ['name','university_id','email','password','avatar',
         'activation_code','is_active','level_id','academic_year_id',
         'activation_code_expires_at'];
     

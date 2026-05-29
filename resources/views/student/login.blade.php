@@ -74,7 +74,7 @@
                                 <button type="button" class="btn-toggle-password" tabindex="-1">
                                     <i class="bi bi-eye"></i>
                                 </button>
-                                <a href="#" class="btn-forgot">{{ __('cms.auth.forgot_password') }}</a>
+                                <a href="{{ route('student.password.request') }}" class="btn-forgot">{{ __('cms.auth.forgot_password') }}</a>
                             </div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

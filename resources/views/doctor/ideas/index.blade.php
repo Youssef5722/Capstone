@@ -50,7 +50,7 @@
                     <tbody>
                         @foreach($ideas as $i => $idea)
                         <tr>
-                            <td class="text-muted" style="font-size:.8rem;">{{ $i + 1 }}</td>
+                            <td class="" style="font-size:.8rem;">{{ $i + 1 }}</td>
                             <td style="font-weight:600;color:var(--text-primary);">{{ $idea->title }}</td>
                             <td style="color:var(--text-muted);font-size:.9rem;">
                                 {{ Str::limit($idea->description, 100) ?: '—' }}

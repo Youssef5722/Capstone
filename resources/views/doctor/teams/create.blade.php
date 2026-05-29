@@ -122,34 +122,6 @@
     </div>
 </div>
 
-@push('styles')
-<style>
-/* Custom Scrollbar for Members list */
-.custom-scroll::-webkit-scrollbar {
-    width: 6px;
-}
-.custom-scroll::-webkit-scrollbar-track {
-    background: transparent;
-}
-.custom-scroll::-webkit-scrollbar-thumb {
-    background: var(--cms-border);
-    border-radius: 10px;
-}
-.custom-scroll::-webkit-scrollbar-thumb:hover {
-    background: #a78bfa;
-}
-
-/* Custom Checkbox Animation */
-.custom-checkbox .form-check-input {
-    transition: all 0.2s ease-in-out;
-}
-.custom-checkbox .form-check-input:checked {
-    background-color: #7A22FD;
-    border-color: #7A22FD;
-    transform: scale(1.1);
-}
-</style>
-@endpush
 
 @push('scripts')
 <script>
